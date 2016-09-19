@@ -35,6 +35,7 @@ def calcActivity(logentities):
     from LogEntities
     group by strftime('%Y-%m-%d %H:%M',actiondate)
     order by 1"""):
+        # print(actionmin+'|'+str(user_count))
         userActivities.append((datetime.strptime(actionmin+':00',
                                                  '%Y-%m-%d %H:%M:%S'),
                                user_count))
@@ -43,7 +44,7 @@ def calcActivity(logentities):
     return userActivities
 
 
-def activity_chart(activitydata):
+def activityChart(activitydata):
     minute, usercount = list(zip(*activitydata))
     from matplotlib import pyplot as plt
     fig, ax = plt.subplots()
@@ -52,9 +53,10 @@ def activity_chart(activitydata):
     fig.autofmt_xdate()
     fig.suptitle('User Activity by minute')
     ax.set_xlabel('minute')
-    ax.set_ylabel('user count')
+    ax.set_ylabel('concurrent user#')
     _, labels = plt.xticks()
     plt.setp(labels, rotation=90)
+    plt.ylim(0, 30)
     plt.show()
 
 
@@ -81,7 +83,7 @@ def extractLog(logWriterFile, starttime, endtime):
 
 
 # test with actual time range
-activity_chart(calcActivity(extractLog(
-    r'E:\Download\Alisa\LogWriterLog_202_0913.txt',
+activityChart(calcActivity(extractLog(
+    r'D:\Project\Allocation\Load\20160918\LogWriterLog203.txt',
     datetime.strptime('2016-09-13 00:00:00', '%Y-%m-%d %H:%M:%S'),
     datetime.strptime('2016-09-14 00:00:00', '%Y-%m-%d %H:%M:%S'))))
