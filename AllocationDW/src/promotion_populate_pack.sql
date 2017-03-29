@@ -185,7 +185,8 @@ CREATE OR REPLACE PACKAGE BODY PROMOTION_POPULATE_PACK IS
        DIM_POPULATE_PACK.POP_DIM_CRITERIA_GROUP_REL(P_CRITERIA_GROUP_ID => P_PROD_CRITERIA_GROUP_ID);
     END IF;
 
-    FOR ITEM IN (SELECT O.*,ROWNUM ATTR_SEQ2
+    FOR ITEM IN (SELECT X.*,ROWNUM ATTR_SEQ2 FROM (
+                   SELECT *
                    FROM (SELECT CASE B.BUSINESS_DESC
                                   WHEN A.PROD_ATTR_NAME1 THEN
                                    1
@@ -258,7 +259,8 @@ CREATE OR REPLACE PACKAGE BODY PROMOTION_POPULATE_PACK IS
                                 A.PROD_ATTR_NAME20 = B.BUSINESS_DESC)
                           WHERE A.PROD_ATTR_ID = P_PROD_ATTR_ID) O
                           WHERE ','||O.SOURCE_BUSKEY_HASH_STR||',' LIKE '%,'||O.ATTR_SEQ||',%'
-                  ORDER BY INSTR(','||O.SOURCE_BUSKEY_HASH_STR||',',','||O.ATTR_SEQ||',')) LOOP
+                  ORDER BY INSTR(','||O.SOURCE_BUSKEY_HASH_STR||',',','||O.ATTR_SEQ||',')) X
+                  ) LOOP
 
       EXECUTE IMMEDIATE 'SELECT DISTINCT 0 ID, UPPER(PROD_ATTR_VALUE' || ITEM.ATTR_SEQ || ') SOURCE_BUSKEY '||CHR(10)||
                         ' FROM DIM_PROD_ATTR_VALUE V '||CHR(10)||
@@ -334,7 +336,8 @@ CREATE OR REPLACE PACKAGE BODY PROMOTION_POPULATE_PACK IS
        DIM_POPULATE_PACK.POP_DIM_CRITERIA_GROUP_REL(P_CRITERIA_GROUP_ID => P_LOC_CRITERIA_GROUP_ID);
     END IF;
 
-    FOR ITEM IN (SELECT O.*,ROWNUM ATTR_SEQ2
+    FOR ITEM IN (SELECT X.*,ROWNUM ATTR_SEQ2 FROM (
+                   SELECT * 
                    FROM (SELECT CASE B.BUSINESS_DESC
                                   WHEN A.LOC_ATTR_NAME1 THEN
                                    1
@@ -408,7 +411,8 @@ CREATE OR REPLACE PACKAGE BODY PROMOTION_POPULATE_PACK IS
                                 A.LOC_ATTR_NAME20 = B.BUSINESS_DESC)
                           WHERE A.LOC_ATTR_ID = P_LOC_ATTR_ID) O
                           WHERE ','||O.SOURCE_BUSKEY_HASH_STR||',' LIKE '%,'||O.ATTR_SEQ||',%'
-                  ORDER BY INSTR(','||O.SOURCE_BUSKEY_HASH_STR||',',','||O.ATTR_SEQ||',')) LOOP
+                  ORDER BY INSTR(','||O.SOURCE_BUSKEY_HASH_STR||',',','||O.ATTR_SEQ||',')) X                  
+                  ) LOOP
 
       EXECUTE IMMEDIATE 'SELECT DISTINCT 0 ID, UPPER(LOC_ATTR_VALUE' || ITEM.ATTR_SEQ || ') SOURCE_BUSKEY '||CHR(10)||
                         ' FROM DIM_LOC_ATTR_VALUE V '||CHR(10)||

@@ -111,6 +111,9 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
         FROM DUAL
       UNION ALL
       SELECT 'MIN_MAX' DIM_NAME, 'MIN_MAX' BUSINESS_DESC
+        FROM DUAL
+      UNION ALL
+      SELECT 'CLUSTER_SEQUENCE' DIM_NAME, 'CLUSTER_SEQUENCE' BUSINESS_DESC
         FROM DUAL;
   
     COMMIT;
@@ -145,9 +148,9 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
       UNION ALL
       SELECT 'DATE' DIM_NAME,
              'CALENDAR_MONTH' LEVEL_NAME,
-             'DIM_DATE_MONTH' DB_TAB_NAME,
-             'MONTH_ID' DB_KEY_COL_NAME,
-             'CALENDAR_MONTH' BUSINESS_DESC,
+             'DIM_DATE_CMONTH' DB_TAB_NAME,
+             'CMONTH_ID' DB_KEY_COL_NAME,
+             'CALENDAR_CMONTH' BUSINESS_DESC,
              C_DUMMY ETL_SOURCE
         FROM DUAL
       UNION ALL
@@ -192,10 +195,26 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'DIM_DATE_SYEAR' DB_TAB_NAME,
-             'SYEAR_ID' DB_KEY_COL_NAME,
-             '7TH_YEAR' BUSINESS_DESC,
+             '7TH_WYEAR' LEVEL_NAME,
+             'DIM_DATE_SWYEAR' DB_TAB_NAME,
+             'SWYEAR_ID' DB_KEY_COL_NAME,
+             '7TH_WYEAR' BUSINESS_DESC,
+             C_DUMMY ETL_SOURCE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'DIM_DATE_SMYEAR' DB_TAB_NAME,
+             'SMYEAR_ID' DB_KEY_COL_NAME,
+             '7TH_MYEAR' BUSINESS_DESC,
+             C_DUMMY ETL_SOURCE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'DIM_DATE_SWEEK_PART' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_KEY_COL_NAME,
+             '7TH_WEEK_PART' BUSINESS_DESC,
              C_DUMMY ETL_SOURCE
         FROM DUAL
       UNION ALL
@@ -612,6 +631,14 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'DIM_MIN_MAX' DB_TAB_NAME,
              'MIN_MAX_ID' DB_KEY_COL_NAME,
              'MIN_MAX' BUSINESS_DESC,
+             C_DUMMY ETL_SOURCE
+        FROM DUAL
+      UNION ALL
+      SELECT 'CLUSTER_SEQUENCE' DIM_NAME,
+             'CLUSTER_SEQUENCE' LEVEL_NAME,
+             'DIM_CLUSTER_SEQUENCE' DB_TAB_NAME,
+             'CLUSTER_SEQUENCE_ID' DB_KEY_COL_NAME,
+             'CLUSTER_SEQUENCE' BUSINESS_DESC,
              C_DUMMY ETL_SOURCE
         FROM DUAL;
   
@@ -5722,9 +5749,9 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
       UNION ALL
       SELECT 'PROMOTION_SCOPE' DIM_NAME,
              'PROMOTION_SCOPE' LEVEL_NAME,
-             'BASE_UNITS_BK' ATTR_NAME,
-             'BASE_UNITS_BK' DB_COL_NAME,
-             'BASE_UNITS_BK' BUSINESS_DESC,
+             'SETTING_VALUE_BK' ATTR_NAME,
+             'SETTING_VALUE_BK' DB_COL_NAME,
+             'SETTING_VALUE_BK' BUSINESS_DESC,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
@@ -5773,6 +5800,38 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'BASE_UNITS_BK' ATTR_NAME,
              'BASE_UNITS_BK' DB_COL_NAME,
              'BASE_UNITS_BK' BUSINESS_DESC,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'CLUSTER_SEQUENCE' DIM_NAME,
+             'CLUSTER_SEQUENCE' LEVEL_NAME,
+             'CLUSTER_SEQUENCE_ID' ATTR_NAME,
+             'CLUSTER_SEQUENCE_ID' DB_COL_NAME,
+             'CLUSTER_SEQUENCE_ID' BUSINESS_DESC,
+             'N' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'CLUSTER_SEQUENCE' DIM_NAME,
+             'CLUSTER_SEQUENCE' LEVEL_NAME,
+             'SOURCE_BUSKEY' ATTR_NAME,
+             'SOURCE_BUSKEY' DB_COL_NAME,
+             'SOURCE_BUSKEY' BUSINESS_DESC,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'CLUSTER_SEQUENCE' DIM_NAME,
+             'CLUSTER_SEQUENCE' LEVEL_NAME,
+             'CLUSTER_NAME' ATTR_NAME,
+             'CLUSTER_NAME' DB_COL_NAME,
+             'CLUSTER_NAME' BUSINESS_DESC,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'CLUSTER_SEQUENCE' DIM_NAME,
+             'CLUSTER_SEQUENCE' LEVEL_NAME,
+             'SEQUENCE' ATTR_NAME,
+             'SEQUENCE' DB_COL_NAME,
+             'SEQUENCE' BUSINESS_DESC,
              'Y' VISABLE
         FROM DUAL;
   
@@ -5829,21 +5888,39 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             '7TH_YMWD' BUSINESS_DESC
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             '7TH_YMW' BUSINESS_DESC
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
              '7TH_YM' HIERARCHY_NAME,
              'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
              '7TH_YM' BUSINESS_DESC
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             '7TH_YMD' BUSINESS_DESC
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             '7TH_YW' BUSINESS_DESC
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             '7TH_YWD' BUSINESS_DESC
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             '7TH_YMSWP' BUSINESS_DESC
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             '7TH_YWSWP' BUSINESS_DESC
         FROM DUAL
       UNION ALL
       SELECT 'STYLE' DIM_NAME,
@@ -6155,137 +6232,267 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'IYEAR_ID' DB_PARENT_KEY_COL_NAME
         FROM DUAL
       UNION ALL
-      --7TH_YMWD
+      --7TH_YM
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             '7TH_YEAR' LEVEL_NAME,
+             '7TH_YM' HIERARCHY_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
              1 LEVEL_ID,
              'Y' TOP,
              'N' BOTTOM,
              C_DUMMY PARENT_LEVEL_NAME,
-             'DIM_DATE_SYEAR' DB_TAB_NAME,
-             'SYEAR_ID' DB_KEY_COL_NAME,
+             'DIM_DATE_SMYEAR' DB_TAB_NAME,
+             'SMYEAR_ID' DB_KEY_COL_NAME,
              C_DUMMY DB_JOIN_COL_NAME,
              C_DUMMY DB_PARENT_TAB_NAME,
              C_DUMMY DB_PARENT_KEY_COL_NAME
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YM' HIERARCHY_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             2 LEVEL_ID,
+             'N' TOP,
+             'Y' BOTTOM,
+             '7TH_MYEAR' PARENT_LEVEL_NAME,
+             'DIM_DATE_SMONTH' DB_TAB_NAME,
+             'SMONTH_ID' DB_KEY_COL_NAME,
+             'SMYEAR_ID' DB_JOIN_COL_NAME,
+             'DIM_DATE_SMYEAR' DB_PARENT_TAB_NAME,
+             'SMYEAR_ID' DB_PARENT_KEY_COL_NAME
+        FROM DUAL
+      UNION ALL
+      --7TH_YW
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             1 LEVEL_ID,
+             'Y' TOP,
+             'N' BOTTOM,
+             C_DUMMY PARENT_LEVEL_NAME,
+             'DIM_DATE_SWYEAR' DB_TAB_NAME,
+             'SWYEAR_ID' DB_KEY_COL_NAME,
+             C_DUMMY DB_JOIN_COL_NAME,
+             C_DUMMY DB_PARENT_TAB_NAME,
+             C_DUMMY DB_PARENT_KEY_COL_NAME
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             2 LEVEL_ID,
+             'N' TOP,
+             'Y' BOTTOM,
+             '7TH_WYEAR' PARENT_LEVEL_NAME,
+             'DIM_DATE_SWEEK' DB_TAB_NAME,
+             'SWEEK_ID' DB_KEY_COL_NAME,
+             'SWYEAR_ID' DB_JOIN_COL_NAME,
+             'DIM_DATE_SWYEAR' DB_PARENT_TAB_NAME,
+             'SWYEAR_ID' DB_PARENT_KEY_COL_NAME
+        FROM DUAL
+      UNION ALL
+      
+      --7TH_YMD
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             1 LEVEL_ID,
+             'Y' TOP,
+             'N' BOTTOM,
+             C_DUMMY PARENT_LEVEL_NAME,
+             'DIM_DATE_SMYEAR' DB_TAB_NAME,
+             'SMYEAR_ID' DB_KEY_COL_NAME,
+             C_DUMMY DB_JOIN_COL_NAME,
+             C_DUMMY DB_PARENT_TAB_NAME,
+             C_DUMMY DB_PARENT_KEY_COL_NAME
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              '7TH_MONTH' LEVEL_NAME,
              2 LEVEL_ID,
              'N' TOP,
              'N' BOTTOM,
-             '7TH_YEAR' PARENT_LEVEL_NAME,
+             '7TH_MYEAR' PARENT_LEVEL_NAME,
              'DIM_DATE_SMONTH' DB_TAB_NAME,
              'SMONTH_ID' DB_KEY_COL_NAME,
-             'SYEAR_ID' DB_JOIN_COL_NAME,
-             'DIM_DATE_SYEAR' DB_PARENT_TAB_NAME,
-             'SYEAR_ID' DB_PARENT_KEY_COL_NAME
+             'SMYEAR_ID' DB_JOIN_COL_NAME,
+             'DIM_DATE_SMYEAR' DB_PARENT_TAB_NAME,
+             'SMYEAR_ID' DB_PARENT_KEY_COL_NAME
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             '7TH_WEEK' LEVEL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
              3 LEVEL_ID,
              'N' TOP,
              'N' BOTTOM,
              '7TH_MONTH' PARENT_LEVEL_NAME,
-             'DIM_DATE_SWEEK' DB_TAB_NAME,
-             'SWEEK_ID' DB_KEY_COL_NAME,
+             'DIM_DATE_SWEEK_PART' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_KEY_COL_NAME,
              'SMONTH_ID' DB_JOIN_COL_NAME,
              'DIM_DATE_SMONTH' DB_PARENT_TAB_NAME,
              'SMONTH_ID' DB_PARENT_KEY_COL_NAME
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'DAY' LEVEL_NAME,
              4 LEVEL_ID,
              'N' TOP,
              'Y' BOTTOM,
-             '7TH_WEEK' PARENT_LEVEL_NAME,
+             '7TH_WEEK_PART' PARENT_LEVEL_NAME,
              'DIM_DATE_DAY' DB_TAB_NAME,
              'DATE_ID' DB_KEY_COL_NAME,
+             'SWEEK_PART_ID' DB_JOIN_COL_NAME,
+             'DIM_DATE_SWEEK_PART' DB_PARENT_TAB_NAME,
+             'SWEEK_PART_ID' DB_PARENT_KEY_COL_NAME
+        FROM DUAL
+      UNION ALL
+      
+      --7TH_YWD
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             1 LEVEL_ID,
+             'Y' TOP,
+             'N' BOTTOM,
+             C_DUMMY PARENT_LEVEL_NAME,
+             'DIM_DATE_SWYEAR' DB_TAB_NAME,
+             'SWYEAR_ID' DB_KEY_COL_NAME,
+             C_DUMMY DB_JOIN_COL_NAME,
+             C_DUMMY DB_PARENT_TAB_NAME,
+             C_DUMMY DB_PARENT_KEY_COL_NAME
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             2 LEVEL_ID,
+             'N' TOP,
+             'N' BOTTOM,
+             '7TH_WYEAR' PARENT_LEVEL_NAME,
+             'DIM_DATE_SWEEK' DB_TAB_NAME,
+             'SWEEK_ID' DB_KEY_COL_NAME,
+             'SWYEAR_ID' DB_JOIN_COL_NAME,
+             'DIM_DATE_SWYEAR' DB_PARENT_TAB_NAME,
+             'SWYEAR_ID' DB_PARENT_KEY_COL_NAME
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             3 LEVEL_ID,
+             'N' TOP,
+             'N' BOTTOM,
+             '7TH_WEEK' PARENT_LEVEL_NAME,
+             'DIM_DATE_SWEEK_PART' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_KEY_COL_NAME,
              'SWEEK_ID' DB_JOIN_COL_NAME,
              'DIM_DATE_SWEEK' DB_PARENT_TAB_NAME,
              'SWEEK_ID' DB_PARENT_KEY_COL_NAME
         FROM DUAL
       UNION ALL
-      --7TH_YMW
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             '7TH_YEAR' LEVEL_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY' LEVEL_NAME,
+             4 LEVEL_ID,
+             'N' TOP,
+             'Y' BOTTOM,
+             '7TH_WEEK_PART' PARENT_LEVEL_NAME,
+             'DIM_DATE_DAY' DB_TAB_NAME,
+             'DATE_ID' DB_KEY_COL_NAME,
+             'SWEEK_PART_ID' DB_JOIN_COL_NAME,
+             'DIM_DATE_SWEEK_PART' DB_PARENT_TAB_NAME,
+             'SWEEK_PART_ID' DB_PARENT_KEY_COL_NAME
+        FROM DUAL
+      UNION ALL
+      --7TH_YMSWP
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
              1 LEVEL_ID,
              'Y' TOP,
              'N' BOTTOM,
              C_DUMMY PARENT_LEVEL_NAME,
-             'DIM_DATE_SYEAR' DB_TAB_NAME,
-             'SYEAR_ID' DB_KEY_COL_NAME,
+             'DIM_DATE_SMYEAR' DB_TAB_NAME,
+             'SMYEAR_ID' DB_KEY_COL_NAME,
              C_DUMMY DB_JOIN_COL_NAME,
              C_DUMMY DB_PARENT_TAB_NAME,
              C_DUMMY DB_PARENT_KEY_COL_NAME
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
              '7TH_MONTH' LEVEL_NAME,
              2 LEVEL_ID,
              'N' TOP,
              'N' BOTTOM,
-             '7TH_YEAR' PARENT_LEVEL_NAME,
+             '7TH_MYEAR' PARENT_LEVEL_NAME,
              'DIM_DATE_SMONTH' DB_TAB_NAME,
              'SMONTH_ID' DB_KEY_COL_NAME,
-             'SYEAR_ID' DB_JOIN_COL_NAME,
-             'DIM_DATE_SYEAR' DB_PARENT_TAB_NAME,
-             'SYEAR_ID' DB_PARENT_KEY_COL_NAME
+             'SMYEAR_ID' DB_JOIN_COL_NAME,
+             'DIM_DATE_SMYEAR' DB_PARENT_TAB_NAME,
+             'SMYEAR_ID' DB_PARENT_KEY_COL_NAME
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             '7TH_WEEK' LEVEL_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
              3 LEVEL_ID,
              'N' TOP,
              'Y' BOTTOM,
              '7TH_MONTH' PARENT_LEVEL_NAME,
-             'DIM_DATE_SWEEK' DB_TAB_NAME,
-             'SWEEK_ID' DB_KEY_COL_NAME,
+             'DIM_DATE_SWEEK_PART' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_KEY_COL_NAME,
              'SMONTH_ID' DB_JOIN_COL_NAME,
              'DIM_DATE_SMONTH' DB_PARENT_TAB_NAME,
              'SMONTH_ID' DB_PARENT_KEY_COL_NAME
         FROM DUAL
       UNION ALL
-      --7TH_YM
+      --7TH_YWSWP
       SELECT 'DATE' DIM_NAME,
-             '7TH_YM' HIERARCHY_NAME,
-             '7TH_YEAR' LEVEL_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
              1 LEVEL_ID,
              'Y' TOP,
              'N' BOTTOM,
              C_DUMMY PARENT_LEVEL_NAME,
-             'DIM_DATE_SYEAR' DB_TAB_NAME,
-             'SYEAR_ID' DB_KEY_COL_NAME,
+             'DIM_DATE_SWYEAR' DB_TAB_NAME,
+             'SWYEAR_ID' DB_KEY_COL_NAME,
              C_DUMMY DB_JOIN_COL_NAME,
              C_DUMMY DB_PARENT_TAB_NAME,
              C_DUMMY DB_PARENT_KEY_COL_NAME
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YM' HIERARCHY_NAME,
-             '7TH_MONTH' LEVEL_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             '7TH_WEEK' LEVEL_NAME,
              2 LEVEL_ID,
              'N' TOP,
-             'Y' BOTTOM,
-             '7TH_YEAR' PARENT_LEVEL_NAME,
-             'DIM_DATE_SMONTH' DB_TAB_NAME,
-             'SMONTH_ID' DB_KEY_COL_NAME,
-             'SYEAR_ID' DB_JOIN_COL_NAME,
-             'DIM_DATE_SYEAR' DB_PARENT_TAB_NAME,
-             'SYEAR_ID' DB_PARENT_KEY_COL_NAME
+             'N' BOTTOM,
+             '7TH_WYEAR' PARENT_LEVEL_NAME,
+             'DIM_DATE_SWEEK' DB_TAB_NAME,
+             'SWEEK_ID' DB_KEY_COL_NAME,
+             'SWYEAR_ID' DB_JOIN_COL_NAME,
+             'DIM_DATE_SWYEAR' DB_PARENT_TAB_NAME,
+             'SWYEAR_ID' DB_PARENT_KEY_COL_NAME
         FROM DUAL
       UNION ALL
-      
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             3 LEVEL_ID,
+             'N' TOP,
+             'Y' BOTTOM,
+             '7TH_WEEK' PARENT_LEVEL_NAME,
+             'DIM_DATE_SWEEK_PART' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_KEY_COL_NAME,
+             'SWEEK_ID' DB_JOIN_COL_NAME,
+             'DIM_DATE_SWEEK' DB_PARENT_TAB_NAME,
+             'SWEEK_ID' DB_PARENT_KEY_COL_NAME
+        FROM DUAL
       --STYLE:PRIMARY_SIZE
+      UNION ALL
       SELECT 'STYLE' DIM_NAME,
              'PRIMARY_SIZE' HIERARCHY_NAME,
              'DEPT' LEVEL_NAME,
@@ -11183,1999 +11390,768 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
         FROM DUAL
       UNION ALL
       
-      --DATE:CALENDAR_YMD
+      --V_DIM_TIME_7TH_YMD
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'DATE_ID' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'DATE_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'DATE_ID' DB_COL_NAME,
-             'N' VISABLE
+             'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'DAY_DATE' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'DAY_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'DAY_DATE' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'DAY_DESC' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'DAY_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'DAY_DESC' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'CWEEK_ID' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'CWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'CWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
+             'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'CMONTH_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'CMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'CMONTH_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'IWEEK_ID' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'IWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'IWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
+             'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'MONTH_ID' ATTR_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWEEK_PART_ID' ATTR_NAME,
              'DAY' LEVEL_NAME,
-             'MONTH_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'MONTH_ID' DB_COL_NAME,
-             'N' VISABLE
+             'SWEEK_PART_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_COL_NAME,
+             'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'DAY_OF_CWEEK' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'DAY_OF_CWEEK' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'DAY_OF_CWEEK' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'DAY_OF_IWEEK' ATTR_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'DAY_OF_CMONTH' ATTR_NAME,
              'DAY' LEVEL_NAME,
-             'DAY_OF_IWEEK' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'DAY_OF_IWEEK' DB_COL_NAME,
+             'DAY_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'DAY_OF_CMONTH' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'DAY_OF_MONTH' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_MONTH' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'DAY_OF_MONTH' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'DAY_OF_CYEAR' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'DAY_OF_CYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'DAY_OF_CYEAR' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'DAY_OF_IYEAR' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_IYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'DAY_OF_IYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'START_DATE' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'END_DATE' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'TIME_SPAN' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'DAY_NUM' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'DAY_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'M_MONTH_ID' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'M_MONTH_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'M_MONTH_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'M_MONTH_DESC' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'M_MONTH_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'M_MONTH_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'M_CYEAR_ID' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'M_CYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'M_CYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'M_MONTH_OF_CYEAR' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'M_MONTH_OF_CYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'M_MONTH_OF_CYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'M_MONTH_NAME' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'M_MONTH_NAME' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'M_MONTH_NAME' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'M_START_DATE' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'M_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'M_START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'M_END_DATE' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'M_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'M_END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'M_TIME_SPAN' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'M_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'M_TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'M_MONTH_NUM' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'M_MONTH_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'M_MONTH_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'CY_CYEAR_ID' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'CY_CYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'CY_CYEAR_DESC' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'CY_CYEAR_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'CY_START_DATE' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'CY_START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'CY_END_DATE' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'CY_END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'CY_TIME_SPAN' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'CY_TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YMD' HIERARCHY_NAME,
-             'CY_CYEAR_NUM' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
-             'CY_CYEAR_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      
-      --DATE:CALENDAR_YM
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'MONTH_ID' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'MONTH_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'MONTH_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'MONTH_DESC' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'MONTH_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'MONTH_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'CYEAR_ID' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'CYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'CYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'MONTH_OF_CYEAR' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'MONTH_OF_CYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'MONTH_OF_CYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'MONTH_NAME' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'MONTH_NAME' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'MONTH_NAME' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'START_DATE' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'END_DATE' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'TIME_SPAN' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'MONTH_NUM' ATTR_NAME,
-             'CALENDAR_MONTH' LEVEL_NAME,
-             'MONTH_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'MONTH_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'CY_CYEAR_ID' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'CY_CYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'CY_CYEAR_DESC' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'CY_CYEAR_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'CY_START_DATE' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'CY_START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'CY_END_DATE' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'CY_END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'CY_TIME_SPAN' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'CY_TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YM' HIERARCHY_NAME,
-             'CY_CYEAR_NUM' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
-             'CY_CYEAR_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      --DATE:CALENDAR_YWD
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'DATE_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DATE_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'DATE_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'DAY_DATE' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'DAY_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'DAY_DESC' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'DAY_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CWEEK_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'CWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'IWEEK_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'IWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'IWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'MONTH_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'MONTH_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'MONTH_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'DAY_OF_CWEEK' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_CWEEK' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'DAY_OF_CWEEK' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'DAY_OF_IWEEK' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'DAY_OF_IWEEK' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'DAY_OF_IWEEK' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'DAY_OF_MONTH' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_MONTH' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'DAY_OF_MONTH' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'DAY_OF_CYEAR' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_CYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'DAY_OF_CYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'DAY_OF_IYEAR' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'DAY_OF_IYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'DAY_OF_IYEAR' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'START_DATE' ATTR_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'DAY_OF_SWEEK_PART' ATTR_NAME,
              'DAY' LEVEL_NAME,
-             'START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'START_DATE' DB_COL_NAME,
+             'DAY_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'DAY_OF_SWEEK_PART' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'END_DATE' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'TIME_SPAN' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'DAY_NUM' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'DAY_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CW_CWEEK_ID' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CW_CWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CW_CWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CW_CWEEK_DESC' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CW_CWEEK_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CW_CWEEK_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CW_CYEAR_ID' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CW_CYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CW_CYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CW_CWEEK_OF_CYEAR' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CW_CWEEK_OF_CYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CW_CWEEK_OF_CYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CW_START_DATE' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CW_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CW_START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CW_END_DATE' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CW_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CW_END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CW_TIME_SPAN' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CW_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CW_TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CW_CWEEK_NUM' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CW_CWEEK_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CW_CWEEK_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CY_CYEAR_ID' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CY_CYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CY_CYEAR_DESC' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CY_CYEAR_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CY_START_DATE' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CY_START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CY_END_DATE' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CY_END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CY_TIME_SPAN' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CY_TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YWD' HIERARCHY_NAME,
-             'CY_CYEAR_NUM' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
-             'CY_CYEAR_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      
-      --DATE:CALENDAR_YW
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'CWEEK_ID' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'CWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'CWEEK_DESC' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CWEEK_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'CWEEK_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'CYEAR_ID' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'CYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'CWEEK_OF_CYEAR' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CWEEK_OF_CYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'CWEEK_OF_CYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'START_DATE' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'END_DATE' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'TIME_SPAN' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'CWEEK_NUM' ATTR_NAME,
-             'CALENDAR_WEEK' LEVEL_NAME,
-             'CWEEK_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'CWEEK_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'CY_CYEAR_ID' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'CY_CYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'CY_CYEAR_DESC' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'CY_CYEAR_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'CY_START_DATE' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'CY_START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'CY_END_DATE' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'CY_END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'CY_TIME_SPAN' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'CY_TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'CALENDAR_YW' HIERARCHY_NAME,
-             'CY_CYEAR_NUM' ATTR_NAME,
-             'CALENDAR_YEAR' LEVEL_NAME,
-             'CY_CYEAR_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
-             'CY_CYEAR_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      
-      --DATE:ISO_YWD
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'DATE_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DATE_ID' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'DATE_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'DAY_DATE' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'DAY_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'DAY_DESC' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'DAY_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'CWEEK_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'CWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'CWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IWEEK_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'IWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'MONTH_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'MONTH_ID' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'MONTH_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'DAY_OF_CWEEK' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_CWEEK' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'DAY_OF_CWEEK' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'DAY_OF_IWEEK' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_IWEEK' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'DAY_OF_IWEEK' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'DAY_OF_MONTH' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_MONTH' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'DAY_OF_MONTH' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'DAY_OF_CYEAR' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_CYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'DAY_OF_CYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'DAY_OF_IYEAR' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_IYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'DAY_OF_IYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'START_DATE' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'END_DATE' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'TIME_SPAN' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'DAY_NUM' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'DAY_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IW_IWEEK_ID' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IW_IWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IW_IWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IW_IWEEK_DESC' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IW_IWEEK_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IW_IWEEK_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IW_IWEEK_OF_IYEAR' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IW_IWEEK_OF_IYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IW_IWEEK_OF_IYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IW_IYEAR_ID' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IW_IYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IW_IYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IW_START_DATE' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IW_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IW_START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IW_END_DATE' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IW_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IW_END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IW_TIME_SPAN' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IW_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IW_TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IW_IWEEK_NUM' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IW_IWEEK_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IW_IWEEK_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IY_IYEAR_ID' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_IYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IY_IYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IY_IYEAR_DESC' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_IYEAR_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IY_IYEAR_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IY_START_DATE' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IY_START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IY_END_DATE' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IY_END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IY_TIME_SPAN' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IY_TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YWD' HIERARCHY_NAME,
-             'IY_IYEAR_NUM' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_IYEAR_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
-             'IY_IYEAR_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      
-      --DATE:ISO_YW
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'IWEEK_ID' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'IWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'IWEEK_DESC' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IWEEK_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'IWEEK_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'IWEEK_OF_IYEAR' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IWEEK_OF_IYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'IWEEK_OF_IYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'IYEAR_ID' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'IYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'START_DATE' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'END_DATE' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'TIME_SPAN' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'IWEEK_NUM' ATTR_NAME,
-             'ISO_WEEK' LEVEL_NAME,
-             'IWEEK_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'IWEEK_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'IY_IYEAR_ID' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_IYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'IY_IYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'IY_IYEAR_DESC' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_IYEAR_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'IY_IYEAR_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'IY_START_DATE' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'IY_START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'IY_END_DATE' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'IY_END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'IY_TIME_SPAN' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'IY_TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             'ISO_YW' HIERARCHY_NAME,
-             'IY_IYEAR_NUM' ATTR_NAME,
-             'ISO_YEAR' LEVEL_NAME,
-             'IY_IYEAR_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
-             'IY_IYEAR_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      --7TH_YMWD
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'DATE_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DATE_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'DATE_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'DAY_DATE' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'DAY_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'DAY_DESC' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'DAY_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'CWEEK_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'CWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'CWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'IWEEK_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'IWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'IWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'MONTH_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'MONTH_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'MONTH_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SWEEK_ID' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'SWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'DAY_OF_CWEEK' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_CWEEK' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'DAY_OF_CWEEK' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'DAY_OF_IWEEK' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_IWEEK' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'DAY_OF_IWEEK' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'DAY_OF_MONTH' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_MONTH' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'DAY_OF_MONTH' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'DAY_OF_CYEAR' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_CYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'DAY_OF_CYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'DAY_OF_IYEAR' ATTR_NAME,
-             'DAY' LEVEL_NAME,
-             'DAY_OF_IYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'DAY_OF_IYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'DAY_OF_SWEEK' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'DAY_OF_SWEEK' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'DAY_OF_SWEEK' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'DAY_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'DAY_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'DAY_OF_SMONTH' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'DAY_OF_SMONTH' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'DAY_OF_SMONTH' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'DAY_OF_SYEAR' ATTR_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'DAY_OF_SMYEAR' ATTR_NAME,
              'DAY' LEVEL_NAME,
-             'DAY_OF_SYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'DAY_OF_SYEAR' DB_COL_NAME,
+             'DAY_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'DAY_OF_SMYEAR' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'START_DATE' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'START_DATE' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'END_DATE' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'END_DATE' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'TIME_SPAN' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'TIME_SPAN' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'DAY_NUM' ATTR_NAME,
              'DAY' LEVEL_NAME,
              'DAY_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'DAY_NUM' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SW_SWEEK_ID' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SW_SWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SW_SWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SW_SWEEK_DESC' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SW_SWEEK_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SW_SWEEK_DESC' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'DAY_SEQ' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'DAY_SEQ' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SW_SMONTH_ID' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SW_SMONTH_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SW_SMONTH_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SW_SWEEK_OF_SMONTH' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SW_SWEEK_OF_SMONTH' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SW_SWEEK_OF_SMONTH' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_ID' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SW_SWEEK_OF_SYEAR' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SW_SWEEK_OF_SYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SW_SWEEK_OF_SYEAR' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_DESC' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_DESC' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SW_START_DATE' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SW_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SW_START_DATE' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_SMONTH_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_SMONTH_ID' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SW_END_DATE' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SW_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SW_END_DATE' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_SWEEK_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_SWEEK_ID' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SW_TIME_SPAN' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SW_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SW_TIME_SPAN' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_OF_SMONTH' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SW_SWEEK_NUM' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SW_SWEEK_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SW_SWEEK_NUM' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_OF_SWEEK' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_IS_FIRST_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_IS_FIRST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_IS_FIRST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_IS_LAST_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_IS_LAST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_IS_LAST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_IS_FIRST_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_IS_FIRST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_IS_FIRST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_IS_LAST_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_IS_LAST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_IS_LAST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_START_DATE' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_END_DATE' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_TIME_SPAN' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_NUM' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_SEQ' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'SM_SMONTH_ID' ATTR_NAME,
              '7TH_MONTH' LEVEL_NAME,
              'SM_SMONTH_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'SM_SMONTH_ID' DB_COL_NAME,
-             'N' VISABLE
+             'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'SM_SMONTH_DESC' ATTR_NAME,
              '7TH_MONTH' LEVEL_NAME,
              'SM_SMONTH_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'SM_SMONTH_DESC' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SM_SYEAR_ID' ATTR_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SM_SMYEAR_ID' ATTR_NAME,
              '7TH_MONTH' LEVEL_NAME,
-             'SM_SYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SM_SYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SM_SMONTH_OF_CYEAR' ATTR_NAME,
-             '7TH_MONTH' LEVEL_NAME,
-             'SM_SMONTH_OF_CYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SM_SMONTH_OF_CYEAR' DB_COL_NAME,
+             'SM_SMYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SM_SMYEAR_ID' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SM_SMONTH_OF_SMYEAR' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_SMONTH_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SM_SMONTH_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'SM_SMONTH_NAME' ATTR_NAME,
              '7TH_MONTH' LEVEL_NAME,
              'SM_SMONTH_NAME' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'SM_SMONTH_NAME' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SM_IS_FIRST_OF_SMYEAR' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_IS_FIRST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SM_IS_FIRST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SM_IS_LAST_OF_SMYEAR' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_IS_LAST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SM_IS_LAST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'SM_START_DATE' ATTR_NAME,
              '7TH_MONTH' LEVEL_NAME,
              'SM_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'SM_START_DATE' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'SM_END_DATE' ATTR_NAME,
              '7TH_MONTH' LEVEL_NAME,
              'SM_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'SM_END_DATE' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'SM_TIME_SPAN' ATTR_NAME,
              '7TH_MONTH' LEVEL_NAME,
              'SM_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'SM_TIME_SPAN' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
              'SM_SMONTH_NUM' ATTR_NAME,
              '7TH_MONTH' LEVEL_NAME,
              'SM_SMONTH_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
              'SM_SMONTH_NUM' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SY_SYEAR_ID' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_SYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SY_SYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SY_SYEAR_DESC' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_SYEAR_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SY_SYEAR_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SY_START_DATE' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SY_START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SY_END_DATE' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SY_END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SY_TIME_SPAN' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SY_TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMWD' HIERARCHY_NAME,
-             'SY_SYEAR_NUM' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_SYEAR_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMWD' DB_TAB_NAME,
-             'SY_SYEAR_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      --7TH_YMW
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SWEEK_ID' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SWEEK_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SWEEK_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SWEEK_DESC' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SWEEK_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SWEEK_DESC' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SMONTH_ID' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SMONTH_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SMONTH_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SWEEK_OF_SMONTH' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SWEEK_OF_SMONTH' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SWEEK_OF_SMONTH' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SWEEK_OF_SYEAR' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SWEEK_OF_SYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SWEEK_OF_SYEAR' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'START_DATE' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'END_DATE' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'TIME_SPAN' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SWEEK_NUM' ATTR_NAME,
-             '7TH_WEEK' LEVEL_NAME,
-             'SWEEK_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SWEEK_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SM_SMONTH_ID' ATTR_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SM_SMONTH_SEQ' ATTR_NAME,
              '7TH_MONTH' LEVEL_NAME,
-             'SM_SMONTH_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SM_SMONTH_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SM_SMONTH_DESC' ATTR_NAME,
-             '7TH_MONTH' LEVEL_NAME,
-             'SM_SMONTH_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SM_SMONTH_DESC' DB_COL_NAME,
+             'SM_SMONTH_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SM_SMONTH_SEQ' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SM_SYEAR_ID' ATTR_NAME,
-             '7TH_MONTH' LEVEL_NAME,
-             'SM_SYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SM_SYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SM_SMONTH_OF_CYEAR' ATTR_NAME,
-             '7TH_MONTH' LEVEL_NAME,
-             'SM_SMONTH_OF_CYEAR' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SM_SMONTH_OF_CYEAR' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SMY_SMYEAR_ID' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SMY_SMYEAR_ID' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SM_SMONTH_NAME' ATTR_NAME,
-             '7TH_MONTH' LEVEL_NAME,
-             'SM_SMONTH_NAME' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SM_SMONTH_NAME' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SMY_SMYEAR_DESC' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SMY_SMYEAR_DESC' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SM_START_DATE' ATTR_NAME,
-             '7TH_MONTH' LEVEL_NAME,
-             'SM_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SM_START_DATE' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SMY_START_DATE' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SMY_START_DATE' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SM_END_DATE' ATTR_NAME,
-             '7TH_MONTH' LEVEL_NAME,
-             'SM_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SM_END_DATE' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SMY_END_DATE' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SMY_END_DATE' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SM_TIME_SPAN' ATTR_NAME,
-             '7TH_MONTH' LEVEL_NAME,
-             'SM_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SM_TIME_SPAN' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SMY_TIME_SPAN' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SMY_TIME_SPAN' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SM_SMONTH_NUM' ATTR_NAME,
-             '7TH_MONTH' LEVEL_NAME,
-             'SM_SMONTH_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SM_SMONTH_NUM' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SMY_SMYEAR_NUM' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SMY_SMYEAR_NUM' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SY_SYEAR_ID' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_SYEAR_ID' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SY_SYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SY_SYEAR_DESC' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_SYEAR_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SY_SYEAR_DESC' DB_COL_NAME,
+             '7TH_YMD' HIERARCHY_NAME,
+             'SMY_SMYEAR_SEQ' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMD' DB_TAB_NAME,
+             'SMY_SMYEAR_SEQ' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
+      --V_DIM_TIME_7TH_YM
       UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SY_START_DATE' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_START_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SY_START_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SY_END_DATE' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_END_DATE' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SY_END_DATE' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SY_TIME_SPAN' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_TIME_SPAN' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SY_TIME_SPAN' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YMW' HIERARCHY_NAME,
-             'SY_SYEAR_NUM' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_SYEAR_NUM' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YMW' DB_TAB_NAME,
-             'SY_SYEAR_NUM' DB_COL_NAME,
-             'Y' VISABLE
-        FROM DUAL
-      UNION ALL
-      --7TH_YM
       SELECT 'DATE' DIM_NAME,
              '7TH_YM' HIERARCHY_NAME,
              'SMONTH_ID' ATTR_NAME,
@@ -13183,7 +12159,7 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'SMONTH_ID' BUSINESS_DESC,
              'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
              'SMONTH_ID' DB_COL_NAME,
-             'N' VISABLE
+             'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
@@ -13198,21 +12174,21 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
       UNION ALL
       SELECT 'DATE' DIM_NAME,
              '7TH_YM' HIERARCHY_NAME,
-             'SYEAR_ID' ATTR_NAME,
+             'SMYEAR_ID' ATTR_NAME,
              '7TH_MONTH' LEVEL_NAME,
-             'SYEAR_ID' BUSINESS_DESC,
+             'SMYEAR_ID' BUSINESS_DESC,
              'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
-             'SYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
+             'SMYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
              '7TH_YM' HIERARCHY_NAME,
-             'SMONTH_OF_CYEAR' ATTR_NAME,
+             'SMONTH_OF_SMYEAR' ATTR_NAME,
              '7TH_MONTH' LEVEL_NAME,
-             'SMONTH_OF_CYEAR' BUSINESS_DESC,
+             'SMONTH_OF_SMYEAR' BUSINESS_DESC,
              'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
-             'SMONTH_OF_CYEAR' DB_COL_NAME,
+             'SMONTH_OF_SMYEAR' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
@@ -13223,6 +12199,26 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'SMONTH_NAME' BUSINESS_DESC,
              'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
              'SMONTH_NAME' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YM' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMYEAR' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'IS_FIRST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
+             'IS_FIRST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YM' HIERARCHY_NAME,
+             'IS_LAST_OF_SMYEAR' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'IS_LAST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
+             'IS_LAST_OF_SMYEAR' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
@@ -13268,61 +12264,4042 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
       UNION ALL
       SELECT 'DATE' DIM_NAME,
              '7TH_YM' HIERARCHY_NAME,
-             'SY_SYEAR_ID' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_SYEAR_ID' BUSINESS_DESC,
+             'SMONTH_SEQ' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SMONTH_SEQ' BUSINESS_DESC,
              'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
-             'SY_SYEAR_ID' DB_COL_NAME,
-             'N' VISABLE
-        FROM DUAL
-      UNION ALL
-      SELECT 'DATE' DIM_NAME,
-             '7TH_YM' HIERARCHY_NAME,
-             'SY_SYEAR_DESC' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_SYEAR_DESC' BUSINESS_DESC,
-             'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
-             'SY_SYEAR_DESC' DB_COL_NAME,
+             'SMONTH_SEQ' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
              '7TH_YM' HIERARCHY_NAME,
-             'SY_START_DATE' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_START_DATE' BUSINESS_DESC,
+             'SMY_SMYEAR_ID' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_ID' BUSINESS_DESC,
              'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
-             'SY_START_DATE' DB_COL_NAME,
+             'SMY_SMYEAR_ID' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
              '7TH_YM' HIERARCHY_NAME,
-             'SY_END_DATE' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_END_DATE' BUSINESS_DESC,
+             'SMY_SMYEAR_DESC' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_DESC' BUSINESS_DESC,
              'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
-             'SY_END_DATE' DB_COL_NAME,
+             'SMY_SMYEAR_DESC' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
              '7TH_YM' HIERARCHY_NAME,
-             'SY_TIME_SPAN' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_TIME_SPAN' BUSINESS_DESC,
+             'SMY_START_DATE' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_START_DATE' BUSINESS_DESC,
              'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
-             'SY_TIME_SPAN' DB_COL_NAME,
+             'SMY_START_DATE' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
       SELECT 'DATE' DIM_NAME,
              '7TH_YM' HIERARCHY_NAME,
-             'SY_SYEAR_NUM' ATTR_NAME,
-             '7TH_YEAR' LEVEL_NAME,
-             'SY_SYEAR_NUM' BUSINESS_DESC,
+             'SMY_END_DATE' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_END_DATE' BUSINESS_DESC,
              'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
-             'SY_SYEAR_NUM' DB_COL_NAME,
+             'SMY_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YM' HIERARCHY_NAME,
+             'SMY_TIME_SPAN' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
+             'SMY_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YM' HIERARCHY_NAME,
+             'SMY_SMYEAR_NUM' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
+             'SMY_SMYEAR_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YM' HIERARCHY_NAME,
+             'SMY_SMYEAR_SEQ' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YM' DB_TAB_NAME,
+             'SMY_SMYEAR_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      --V_DIM_TIME_7TH_YWD
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DATE_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DATE_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DATE_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_DESC' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'CWEEK_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'CWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'CWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'CMONTH_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'CMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'CMONTH_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IWEEK_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWEEK_PART_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'SWEEK_PART_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'START_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'END_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'TIME_SPAN' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_NUM' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'DAY_SEQ' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'DAY_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_DESC' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_SMONTH_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_SMONTH_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_SWEEK_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_SWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_IS_FIRST_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_IS_FIRST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_IS_FIRST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_IS_LAST_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_IS_LAST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_IS_LAST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_IS_FIRST_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_IS_FIRST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_IS_FIRST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_IS_LAST_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_IS_LAST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_IS_LAST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_START_DATE' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_END_DATE' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_TIME_SPAN' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_NUM' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWP_SWEEK_PART_SEQ' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWP_SWEEK_PART_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWP_SWEEK_PART_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SW_SWEEK_ID' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_SWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SW_SWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SW_SWEEK_DESC' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_SWEEK_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SW_SWEEK_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SW_SWYEAR_ID' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_SWYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SW_SWYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SW_SWEEK_OF_SWYEAR' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_SWEEK_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SW_SWEEK_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SW_IS_FIRST_OF_SWYEAR' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_IS_FIRST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SW_IS_FIRST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SW_IS_LAST_OF_SWYEAR' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_IS_LAST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SW_IS_LAST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SW_START_DATE' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SW_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SW_END_DATE' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SW_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SW_TIME_SPAN' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SW_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SW_SWEEK_NUM' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_SWEEK_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SW_SWEEK_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SW_SWEEK_SEQ' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_SWEEK_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SW_SWEEK_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWY_SWYEAR_ID' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWY_SWYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWY_SWYEAR_DESC' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWY_SWYEAR_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWY_START_DATE' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWY_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWY_END_DATE' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWY_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWY_TIME_SPAN' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWY_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWY_SWYEAR_NUM' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWY_SWYEAR_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWD' HIERARCHY_NAME,
+             'SWY_SWYEAR_SEQ' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YWD' DB_TAB_NAME,
+             'SWY_SWYEAR_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      --V_DIM_TIME_7TH_YW
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWEEK_ID' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWEEK_DESC' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SWEEK_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWEEK_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWYEAR_ID' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SWYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWEEK_OF_SWYEAR' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SWEEK_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWEEK_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWYEAR' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'IS_FIRST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'IS_FIRST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'IS_LAST_OF_SWYEAR' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'IS_LAST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'IS_LAST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'START_DATE' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'END_DATE' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'TIME_SPAN' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWEEK_NUM' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SWEEK_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWEEK_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWEEK_SEQ' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SWEEK_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWEEK_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWY_SWYEAR_ID' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWY_SWYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWY_SWYEAR_DESC' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWY_SWYEAR_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWY_START_DATE' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWY_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWY_END_DATE' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWY_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWY_TIME_SPAN' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWY_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWY_SWYEAR_NUM' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWY_SWYEAR_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YW' HIERARCHY_NAME,
+             'SWY_SWYEAR_SEQ' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YW' DB_TAB_NAME,
+             'SWY_SWYEAR_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      --7TH_YMSWP:V_DIM_TIME_7TH_YMWSWP       
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SWEEK_PART_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SWEEK_PART_DESC' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SMONTH_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SMONTH_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SWEEK_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SWEEK_PART_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SWEEK_PART_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'IS_FIRST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'IS_FIRST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'IS_LAST_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'IS_LAST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'IS_LAST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'START_DATE' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'END_DATE' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'TIME_SPAN' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SWEEK_PART_NUM' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SWEEK_PART_SEQ' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_SMONTH_ID' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_SMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_SMONTH_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_SMONTH_DESC' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_SMONTH_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_SMONTH_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_SMYEAR_ID' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_SMYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_SMYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_SMONTH_OF_SMYEAR' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_SMONTH_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_SMONTH_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_SMONTH_NAME' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_SMONTH_NAME' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_SMONTH_NAME' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_IS_FIRST_OF_SMYEAR' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_IS_FIRST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_IS_FIRST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_IS_LAST_OF_SMYEAR' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_IS_LAST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_IS_LAST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_START_DATE' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_END_DATE' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_TIME_SPAN' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_SMONTH_NUM' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_SMONTH_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_SMONTH_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SM_SMONTH_SEQ' ATTR_NAME,
+             '7TH_MONTH' LEVEL_NAME,
+             'SM_SMONTH_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SM_SMONTH_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SMY_SMYEAR_ID' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SMY_SMYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SMY_SMYEAR_DESC' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SMY_SMYEAR_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SMY_START_DATE' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SMY_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SMY_END_DATE' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SMY_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SMY_TIME_SPAN' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SMY_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SMY_SMYEAR_NUM' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SMY_SMYEAR_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YMSWP' HIERARCHY_NAME,
+             'SMY_SMYEAR_SEQ' ATTR_NAME,
+             '7TH_MYEAR' LEVEL_NAME,
+             'SMY_SMYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SMY_SMYEAR_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      --7TH_YWSWP:V_DIM_TIME_7TH_YMWSWP
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWEEK_PART_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWEEK_PART_DESC' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SMONTH_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SMONTH_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWEEK_ID' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWEEK_PART_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWEEK_PART_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'IS_FIRST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'IS_FIRST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'IS_LAST_OF_SMONTH' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'IS_LAST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'IS_LAST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'START_DATE' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'END_DATE' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'TIME_SPAN' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWEEK_PART_NUM' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWEEK_PART_SEQ' ATTR_NAME,
+             '7TH_WEEK_PART' LEVEL_NAME,
+             'SWEEK_PART_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWEEK_PART_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SW_SWEEK_ID' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_SWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SW_SWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SW_SWEEK_DESC' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_SWEEK_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SW_SWEEK_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SW_SWYEAR_ID' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_SWYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SW_SWYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SW_SWEEK_OF_SWYEAR' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_SWEEK_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SW_SWEEK_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SW_IS_FIRST_OF_SWYEAR' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_IS_FIRST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SW_IS_FIRST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SW_IS_LAST_OF_SWYEAR' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_IS_LAST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SW_IS_LAST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SW_START_DATE' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SW_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SW_END_DATE' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SW_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SW_TIME_SPAN' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SW_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SW_SWEEK_NUM' ATTR_NAME,
+             '7TH_WEEK' LEVEL_NAME,
+             'SW_SWEEK_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SW_SWEEK_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWY_SWYEAR_ID' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWY_SWYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWY_SWYEAR_DESC' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWY_SWYEAR_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWY_START_DATE' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWY_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWY_END_DATE' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWY_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWY_TIME_SPAN' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWY_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWY_SWYEAR_NUM' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWY_SWYEAR_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             '7TH_YWSWP' HIERARCHY_NAME,
+             'SWY_SWYEAR_SEQ' ATTR_NAME,
+             '7TH_WYEAR' LEVEL_NAME,
+             'SWY_SWYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_7TH_YMWSWP' DB_TAB_NAME,
+             'SWY_SWYEAR_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      
+      --V_DIM_TIME_CALENDAR_YM
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CMONTH_ID' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CMONTH_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CMONTH_DESC' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CMONTH_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CMONTH_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CYEAR_ID' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CMONTH_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CMONTH_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CMONTH_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CMONTH_NAME' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CMONTH_NAME' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CMONTH_NAME' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'IS_FIRST_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'IS_FIRST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'IS_FIRST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'IS_LAST_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'IS_LAST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'IS_LAST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'START_DATE' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'END_DATE' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'TIME_SPAN' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CMONTH_NUM' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CMONTH_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CMONTH_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CMONTH_SEQ' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CMONTH_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CMONTH_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CY_CYEAR_ID' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CY_CYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CY_CYEAR_DESC' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CY_CYEAR_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CY_START_DATE' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CY_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CY_END_DATE' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CY_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CY_TIME_SPAN' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CY_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CY_CYEAR_NUM' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CY_CYEAR_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YM' HIERARCHY_NAME,
+             'CY_CYEAR_SEQ' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YM' DB_TAB_NAME,
+             'CY_CYEAR_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      --V_DIM_TIME_CALENDAR_YMD
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DATE_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DATE_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DATE_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_DESC' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CWEEK_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'CWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CMONTH_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'CMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CMONTH_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IWEEK_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'SWEEK_PART_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'SWEEK_PART_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_FIRST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'IS_LAST_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'IS_LAST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'START_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'END_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'TIME_SPAN' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_NUM' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'DAY_SEQ' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'DAY_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_CMONTH_ID' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_CMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_CMONTH_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_CMONTH_DESC' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_CMONTH_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_CMONTH_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_CYEAR_ID' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_CYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_CYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_CMONTH_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_CMONTH_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_CMONTH_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_CMONTH_NAME' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_CMONTH_NAME' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_CMONTH_NAME' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_IS_FIRST_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_IS_FIRST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_IS_FIRST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_IS_LAST_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_IS_LAST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_IS_LAST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_START_DATE' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_END_DATE' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_TIME_SPAN' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_CMONTH_NUM' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_CMONTH_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_CMONTH_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CM_CMONTH_SEQ' ATTR_NAME,
+             'CALENDAR_MONTH' LEVEL_NAME,
+             'CM_CMONTH_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CM_CMONTH_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CY_CYEAR_ID' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CY_CYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CY_CYEAR_DESC' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CY_CYEAR_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CY_START_DATE' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CY_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CY_END_DATE' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CY_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CY_TIME_SPAN' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CY_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CY_CYEAR_NUM' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CY_CYEAR_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YMD' HIERARCHY_NAME,
+             'CY_CYEAR_SEQ' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YMD' DB_TAB_NAME,
+             'CY_CYEAR_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      --V_DIM_TIME_CALENDAR_YW
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CWEEK_ID' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CWEEK_DESC' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CWEEK_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CWEEK_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CYEAR_ID' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CWEEK_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CWEEK_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CWEEK_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'IS_FIRST_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'IS_FIRST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'IS_FIRST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'IS_LAST_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'IS_LAST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'IS_LAST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'START_DATE' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'END_DATE' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'TIME_SPAN' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CWEEK_NUM' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CWEEK_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CWEEK_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CWEEK_SEQ' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CWEEK_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CWEEK_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CY_CYEAR_ID' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CY_CYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CY_CYEAR_DESC' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CY_CYEAR_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CY_START_DATE' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CY_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CY_END_DATE' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CY_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CY_TIME_SPAN' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CY_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CY_CYEAR_NUM' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CY_CYEAR_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YW' HIERARCHY_NAME,
+             'CY_CYEAR_SEQ' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YW' DB_TAB_NAME,
+             'CY_CYEAR_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      --V_DIM_TIME_CALENDAR_YWD
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DATE_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DATE_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DATE_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_DESC' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CWEEK_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'CWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CMONTH_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'CMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CMONTH_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IWEEK_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'SWEEK_PART_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'SWEEK_PART_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'START_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'END_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'TIME_SPAN' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_NUM' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'DAY_SEQ' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'DAY_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CW_CWEEK_ID' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CW_CWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CW_CWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CW_CWEEK_DESC' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CW_CWEEK_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CW_CWEEK_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CW_CYEAR_ID' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CW_CYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CW_CYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CW_CWEEK_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CW_CWEEK_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CW_CWEEK_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CW_IS_FIRST_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CW_IS_FIRST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CW_IS_FIRST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CW_IS_LAST_OF_CYEAR' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CW_IS_LAST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CW_IS_LAST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CW_START_DATE' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CW_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CW_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CW_END_DATE' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CW_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CW_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CW_TIME_SPAN' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CW_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CW_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CW_CWEEK_NUM' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CW_CWEEK_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CW_CWEEK_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CW_CWEEK_SEQ' ATTR_NAME,
+             'CALENDAR_WEEK' LEVEL_NAME,
+             'CW_CWEEK_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CW_CWEEK_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CY_CYEAR_ID' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CY_CYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CY_CYEAR_DESC' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CY_CYEAR_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CY_START_DATE' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CY_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CY_END_DATE' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CY_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CY_TIME_SPAN' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CY_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CY_CYEAR_NUM' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CY_CYEAR_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'CALENDAR_YWD' HIERARCHY_NAME,
+             'CY_CYEAR_SEQ' ATTR_NAME,
+             'CALENDAR_YEAR' LEVEL_NAME,
+             'CY_CYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_CALENDAR_YWD' DB_TAB_NAME,
+             'CY_CYEAR_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      --V_DIM_TIME_ISO_YW
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IWEEK_ID' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IWEEK_DESC' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IWEEK_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IWEEK_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IYEAR_ID' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IWEEK_OF_IYEAR' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IWEEK_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IWEEK_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IS_FIRST_OF_IYEAR' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IS_FIRST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IS_FIRST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IS_LAST_OF_IYEAR' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IS_LAST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IS_LAST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'START_DATE' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'END_DATE' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'TIME_SPAN' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IWEEK_NUM' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IWEEK_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IWEEK_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IWEEK_SEQ' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IWEEK_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IWEEK_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IY_IYEAR_ID' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_IYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IY_IYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IY_IYEAR_DESC' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_IYEAR_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IY_IYEAR_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IY_START_DATE' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IY_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IY_END_DATE' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IY_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IY_TIME_SPAN' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IY_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IY_IYEAR_NUM' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_IYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IY_IYEAR_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YW' HIERARCHY_NAME,
+             'IY_IYEAR_SEQ' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_IYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YW' DB_TAB_NAME,
+             'IY_IYEAR_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      --V_DIM_TIME_ISO_YWD
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DATE_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DATE_ID' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DATE_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_DESC' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'CWEEK_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'CWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'CWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'CMONTH_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'CMONTH_ID' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'CMONTH_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IWEEK_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'SWEEK_PART_ID' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'SWEEK_PART_ID' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'SWEEK_PART_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_CWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_CWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_CMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_CMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_CYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_CYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_CYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_IWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_IWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_IWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_IYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK_PART' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK_PART' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK_PART' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWEEK' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWEEK' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SWEEK' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SWYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SWYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SWYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SMONTH' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SMONTH' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SMONTH' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_FIRST_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_FIRST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_FIRST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IS_LAST_OF_SMYEAR' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'IS_LAST_OF_SMYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IS_LAST_OF_SMYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'START_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'END_DATE' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'TIME_SPAN' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_NUM' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'DAY_SEQ' ATTR_NAME,
+             'DAY' LEVEL_NAME,
+             'DAY_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'DAY_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IW_IWEEK_ID' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IW_IWEEK_ID' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IW_IWEEK_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IW_IWEEK_DESC' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IW_IWEEK_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IW_IWEEK_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IW_IYEAR_ID' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IW_IYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IW_IYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IW_IWEEK_OF_IYEAR' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IW_IWEEK_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IW_IWEEK_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IW_IS_FIRST_OF_IYEAR' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IW_IS_FIRST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IW_IS_FIRST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IW_IS_LAST_OF_IYEAR' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IW_IS_LAST_OF_IYEAR' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IW_IS_LAST_OF_IYEAR' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IW_START_DATE' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IW_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IW_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IW_END_DATE' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IW_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IW_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IW_TIME_SPAN' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IW_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IW_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IW_IWEEK_NUM' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IW_IWEEK_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IW_IWEEK_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IW_IWEEK_SEQ' ATTR_NAME,
+             'ISO_WEEK' LEVEL_NAME,
+             'IW_IWEEK_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IW_IWEEK_SEQ' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IY_IYEAR_ID' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_IYEAR_ID' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IY_IYEAR_ID' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IY_IYEAR_DESC' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_IYEAR_DESC' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IY_IYEAR_DESC' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IY_START_DATE' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_START_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IY_START_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IY_END_DATE' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_END_DATE' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IY_END_DATE' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IY_TIME_SPAN' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_TIME_SPAN' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IY_TIME_SPAN' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IY_IYEAR_NUM' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_IYEAR_NUM' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IY_IYEAR_NUM' DB_COL_NAME,
+             'Y' VISABLE
+        FROM DUAL
+      UNION ALL
+      SELECT 'DATE' DIM_NAME,
+             'ISO_YWD' HIERARCHY_NAME,
+             'IY_IYEAR_SEQ' ATTR_NAME,
+             'ISO_YEAR' LEVEL_NAME,
+             'IY_IYEAR_SEQ' BUSINESS_DESC,
+             'V_DIM_TIME_ISO_YWD' DB_TAB_NAME,
+             'IY_IYEAR_SEQ' DB_COL_NAME,
              'Y' VISABLE
         FROM DUAL
       UNION ALL
@@ -18003,7 +20980,7 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
       SELECT 'MIN_MAX_PROD_LOC' FACT_NAME,
              'FACT_MIN_MAX_PROD_LOC',
              'MIN_MAX_PROD_LOC' BUSINESS_DESC
-        FROM DUAL        
+        FROM DUAL
       UNION ALL
       SELECT 'MIN_MAX_SC_LOC' FACT_NAME,
              'FACT_MIN_MAX_SC_LOC',
@@ -20190,7 +23167,7 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'STORE_LOC_ID' DB_FACT_KEY_COL_NAME,
              'STORE_LOC_ID' DB_DIM_LEVEL_KEY_COL_NAME
         FROM DUAL
-
+      
       UNION ALL
       SELECT 'MIN_MAX_PROD_LOC' FACT_NAME,
              'STYLE' DIM_NAME,
@@ -20198,7 +23175,7 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'FACT_MIN_MAX_PROD_LOC' DB_FACT_TAB_NAME,
              'PROD_ATTR_VALUE_ID' DB_FACT_KEY_COL_NAME,
              'PROD_ATTR_VALUE_ID' DB_DIM_LEVEL_KEY_COL_NAME
-        FROM DUAL        
+        FROM DUAL
       UNION ALL
       SELECT 'MIN_MAX_PROD_LOC' FACT_NAME,
              'STORE' DIM_NAME,
@@ -20206,7 +23183,7 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'FACT_MIN_MAX_PROD_LOC' DB_FACT_TAB_NAME,
              'LOC_ATTR_VALUE_ID' DB_FACT_KEY_COL_NAME,
              'LOC_ATTR_VALUE_ID' DB_DIM_LEVEL_KEY_COL_NAME
-        FROM DUAL         
+        FROM DUAL
       UNION ALL
       SELECT 'MIN_MAX_PROD_LOC' FACT_NAME,
              'MIN_MAX' DIM_NAME,
@@ -20214,8 +23191,15 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'FACT_MIN_MAX_PROD_LOC' DB_FACT_TAB_NAME,
              'MIN_MAX_ID' DB_FACT_KEY_COL_NAME,
              'MIN_MAX_ID' DB_DIM_LEVEL_KEY_COL_NAME
-        FROM DUAL             
-        
+        FROM DUAL
+      UNION ALL
+      SELECT 'MIN_MAX_PROD_LOC' FACT_NAME,
+             'CLUSTER_SEQUENCE' DIM_NAME,
+             'CLUSTER_SEQUENCE' LEVEL_NAME,
+             'FACT_MIN_MAX_PROD_LOC' DB_FACT_TAB_NAME,
+             'CLUSTER_SEQUENCE_ID' DB_FACT_KEY_COL_NAME,
+             'CLUSTER_SEQUENCE_ID' DB_DIM_LEVEL_KEY_COL_NAME
+        FROM DUAL
       UNION ALL
       SELECT 'MIN_MAX_SC_LOC' FACT_NAME,
              'STYLE' DIM_NAME,
@@ -20223,7 +23207,7 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'FACT_MIN_MAX_SC_LOC' DB_FACT_TAB_NAME,
              'STYLE_COLOR_ID' DB_FACT_KEY_COL_NAME,
              'STYLE_COLOR_ID' DB_DIM_LEVEL_KEY_COL_NAME
-        FROM DUAL        
+        FROM DUAL
       UNION ALL
       SELECT 'MIN_MAX_SC_LOC' FACT_NAME,
              'STORE' DIM_NAME,
@@ -20231,7 +23215,7 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'FACT_MIN_MAX_SC_LOC' DB_FACT_TAB_NAME,
              'LOC_ATTR_VALUE_ID' DB_FACT_KEY_COL_NAME,
              'LOC_ATTR_VALUE_ID' DB_DIM_LEVEL_KEY_COL_NAME
-        FROM DUAL         
+        FROM DUAL
       UNION ALL
       SELECT 'MIN_MAX_SC_LOC' FACT_NAME,
              'MIN_MAX' DIM_NAME,
@@ -20239,6 +23223,14 @@ CREATE OR REPLACE PACKAGE BODY META_POPULATE_PACK IS
              'FACT_MIN_MAX_SC_LOC' DB_FACT_TAB_NAME,
              'MIN_MAX_ID' DB_FACT_KEY_COL_NAME,
              'MIN_MAX_ID' DB_DIM_LEVEL_KEY_COL_NAME
+        FROM DUAL
+      UNION ALL
+      SELECT 'MIN_MAX_SC_LOC' FACT_NAME,
+             'CLUSTER_SEQUENCE' DIM_NAME,
+             'CLUSTER_SEQUENCE' LEVEL_NAME,
+             'FACT_MIN_MAX_SC_LOC' DB_FACT_TAB_NAME,
+             'CLUSTER_SEQUENCE_ID' DB_FACT_KEY_COL_NAME,
+             'CLUSTER_SEQUENCE_ID' DB_DIM_LEVEL_KEY_COL_NAME
         FROM DUAL;
   
     COMMIT;

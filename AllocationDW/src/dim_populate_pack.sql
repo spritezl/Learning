@@ -186,6 +186,8 @@ CREATE OR REPLACE PACKAGE DIM_POPULATE_PACK IS
   --POPULATE TRANSFER FULR DIM_RULE AND THE ASSOCIATED TABLES
   PROCEDURE POP_DIM_RULE(P_IS_INITIAL BOOLEAN DEFAULT TRUE);
 
+  PROCEDURE POP_DIM_CLUSTER_SEQUENCE(P_IS_INITIAL BOOLEAN DEFAULT TRUE);
+
   PROCEDURE POP_DIM_TRANSFER;
 
   PROCEDURE POP_DIM_AUDIT;
@@ -330,10 +332,10 @@ CREATE OR REPLACE PACKAGE BODY DIM_POPULATE_PACK IS
     END GET_SEQ_NEXTVALUE;
 
   PROCEDURE POP_DIM_TIME IS
-    C_START_DATE CONSTANT DATE := TO_DATE('19000101', 'YYYYMMDD');
-    C_END_DATE   CONSTANT DATE := TO_DATE('20991231', 'YYYYMMDD');
-    L_START_DATE DATE;
-    L_END_DATE   DATE;
+  C_START_DATE CONSTANT DATE := TO_DATE('19000101', 'YYYYMMDD');
+  C_END_DATE   CONSTANT DATE := TO_DATE('20991231', 'YYYYMMDD');
+  L_START_DATE DATE;
+  L_END_DATE   DATE;
   BEGIN
 
     SELECT TO_DATE(TO_CHAR(MIN(CALENDAR_DATE)), 'YYYYMMDD'),
@@ -347,81 +349,54 @@ CREATE OR REPLACE PACKAGE BODY DIM_POPULATE_PACK IS
     EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_IWEEK';
     EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_IYEAR';
     EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_CWEEK';
-    EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_MONTH';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_CMONTH';
     EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_CYEAR';
-    EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_SYEAR';
     EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_SMONTH';
     EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_SWEEK';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_SWEEK_PART';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_SMYEAR';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_DATE_SWYEAR';
+
+    SELECT TO_DATE(TO_CHAR(MIN(CALENDAR_DATE)), 'YYYYMMDD'),
+           TO_DATE(TO_CHAR(MAX(CALENDAR_DATE)), 'YYYYMMDD')
+      INTO L_START_DATE, L_END_DATE
+      FROM MONTH_WEEK_MAP@MYLINKAPP;
 
     INSERT INTO DIM_DATE_CYEAR
-      (CYEAR_ID, CYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, CYEAR_NUM)
+      (CYEAR_ID, CYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, CYEAR_NUM, CYEAR_SEQ)
     VALUES
       (0,
        C_DUMMY,
        TO_DATE('19000101', 'YYYYMMDD'),
        TO_DATE('19000101', 'YYYYMMDD'),
        0,
-       0);
-
-    INSERT INTO DIM_DATE_IYEAR
-      (IYEAR_ID, IYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, IYEAR_NUM)
-    VALUES
-      (0,
-       C_DUMMY,
-       TO_DATE('19000101', 'YYYYMMDD'),
-       TO_DATE('19000101', 'YYYYMMDD'),
        0,
        0);
 
-    INSERT INTO DIM_DATE_SYEAR
-      (SYEAR_ID, SYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, SYEAR_NUM)
-    VALUES
-      (0,
-       C_DUMMY,
-       TO_DATE('19000101', 'YYYYMMDD'),
-       TO_DATE('19000101', 'YYYYMMDD'),
-       0,
-       0);
-
-    INSERT INTO DIM_DATE_MONTH
-      (MONTH_ID,
-       MONTH_DESC,
+    INSERT INTO DIM_DATE_CMONTH
+      (CMONTH_ID,
+       CMONTH_DESC,
        CYEAR_ID,
-       MONTH_OF_CYEAR,
-       MONTH_NAME,
+       CMONTH_OF_CYEAR,
+       CMONTH_NAME,
+       IS_FIRST_OF_CYEAR,
+       IS_LAST_OF_CYEAR,
        START_DATE,
        END_DATE,
        TIME_SPAN,
-       MONTH_NUM)
+       CMONTH_NUM,
+       CMONTH_SEQ)
     VALUES
       (0,
        C_DUMMY,
        0,
        0,
        C_DUMMY,
+       'N',
+       'N',
        TO_DATE('19000101', 'YYYYMMDD'),
        TO_DATE('19000101', 'YYYYMMDD'),
        0,
-       0);
-
-    INSERT INTO DIM_DATE_SMONTH
-      (SMONTH_ID,
-       SMONTH_DESC,
-       SYEAR_ID,
-       SMONTH_OF_SYEAR,
-       SMONTH_NAME,
-       START_DATE,
-       END_DATE,
-       TIME_SPAN,
-       SMONTH_NUM)
-    VALUES
-      (0,
-       C_DUMMY,
-       0,
-       0,
-       C_DUMMY,
-       TO_DATE('19000101', 'YYYYMMDD'),
-       TO_DATE('19000101', 'YYYYMMDD'),
        0,
        0);
 
@@ -430,17 +405,35 @@ CREATE OR REPLACE PACKAGE BODY DIM_POPULATE_PACK IS
        CWEEK_DESC,
        CYEAR_ID,
        CWEEK_OF_CYEAR,
+       IS_FIRST_OF_CYEAR,
+       IS_LAST_OF_CYEAR,
        START_DATE,
        END_DATE,
        TIME_SPAN,
-       CWEEK_NUM)
+       CWEEK_NUM,
+       CWEEK_SEQ)
     VALUES
       (0,
        C_DUMMY,
        0,
        0,
+       'N',
+       'N',
        TO_DATE('19000101', 'YYYYMMDD'),
        TO_DATE('19000101', 'YYYYMMDD'),
+       0,
+       0,
+       0);
+
+    -- ISO Calendar
+    INSERT INTO DIM_DATE_IYEAR
+      (IYEAR_ID, IYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, IYEAR_NUM, IYEAR_SEQ)
+    VALUES
+      (0,
+       'DUMMY',
+       TO_DATE('19000101', 'YYYYMMDD'),
+       TO_DATE('19000101', 'YYYYMMDD'),
+       0,
        0,
        0);
 
@@ -448,39 +441,132 @@ CREATE OR REPLACE PACKAGE BODY DIM_POPULATE_PACK IS
       (IWEEK_ID,
        IWEEK_DESC,
        IWEEK_OF_IYEAR,
+       IS_FIRST_OF_IYEAR,
+       IS_LAST_OF_IYEAR,
        IYEAR_ID,
        START_DATE,
        END_DATE,
        TIME_SPAN,
-       IWEEK_NUM)
+       IWEEK_NUM,
+       IWEEK_SEQ)
+    VALUES
+      (0,
+       'DUMMY',
+       0,
+       'N',
+       'N',
+       0,
+       TO_DATE('19000101', 'YYYYMMDD'),
+       TO_DATE('19000101', 'YYYYMMDD'),
+       0,
+       0,
+       0);
+
+    -- 7TH Calendar
+    INSERT INTO DIM_DATE_SMYEAR
+      (SMYEAR_ID, SMYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, SMYEAR_NUM, SMYEAR_SEQ)
+    VALUES
+      (0,
+       C_DUMMY,
+       TO_DATE('19000101', 'YYYYMMDD'),
+       TO_DATE('19000101', 'YYYYMMDD'),
+       0,
+       0,
+       0);
+
+    INSERT INTO DIM_DATE_SWYEAR
+      (SWYEAR_ID, SWYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, SWYEAR_NUM, SWYEAR_SEQ)
+    VALUES
+      (0,
+       C_DUMMY,
+       TO_DATE('19000101', 'YYYYMMDD'),
+       TO_DATE('19000101', 'YYYYMMDD'),
+       0,
+       0,
+       0);
+
+    INSERT INTO DIM_DATE_SMONTH
+      (SMONTH_ID,
+       SMONTH_DESC,
+       SMYEAR_ID,
+       SMONTH_OF_SMYEAR,
+       SMONTH_NAME,
+       IS_FIRST_OF_SMYEAR,
+       IS_LAST_OF_SMYEAR,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       SMONTH_NUM,
+       SMONTH_SEQ)
     VALUES
       (0,
        C_DUMMY,
        0,
        0,
+       C_DUMMY,
+       'N',
+       'N',
        TO_DATE('19000101', 'YYYYMMDD'),
        TO_DATE('19000101', 'YYYYMMDD'),
+       0,
        0,
        0);
 
     INSERT INTO DIM_DATE_SWEEK
       (SWEEK_ID,
        SWEEK_DESC,
-       SMONTH_ID,
-       SWEEK_OF_SMONTH,
-       SWEEK_OF_SYEAR,
+       SWYEAR_ID,
+       SWEEK_OF_SWYEAR,
+       IS_FIRST_OF_SWYEAR,
+       IS_LAST_OF_SWYEAR,
        START_DATE,
        END_DATE,
        TIME_SPAN,
-       SWEEK_NUM)
+       SWEEK_NUM,
+       SWEEK_SEQ)
+    VALUES
+      (0,
+       C_DUMMY,
+       0,
+       0,
+       'N',
+       'N',
+       TO_DATE('19000101', 'YYYYMMDD'),
+       TO_DATE('19000101', 'YYYYMMDD'),
+       0,
+       0,
+       0);
+
+    INSERT INTO DIM_DATE_SWEEK_PART
+      (SWEEK_PART_ID,
+       SWEEK_PART_DESC,
+       SMONTH_ID,
+       SWEEK_ID,
+       SWEEK_PART_OF_SMONTH,
+       SWEEK_PART_OF_SWEEK,
+       IS_FIRST_OF_SMONTH,
+       IS_LAST_OF_SMONTH,
+       IS_FIRST_OF_SWEEK,
+       IS_LAST_OF_SWEEK,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       SWEEK_PART_NUM,
+       SWEEK_PART_SEQ)
     VALUES
       (0,
        C_DUMMY,
        0,
        0,
        0,
+       0,
+       'N',
+       'N',
+       'N',
+       'N',
        TO_DATE('19000101', 'YYYYMMDD'),
        TO_DATE('19000101', 'YYYYMMDD'),
+       0,
        0,
        0);
 
@@ -489,25 +575,48 @@ CREATE OR REPLACE PACKAGE BODY DIM_POPULATE_PACK IS
        DAY_DATE,
        DAY_DESC,
        CWEEK_ID,
+       CMONTH_ID,
        IWEEK_ID,
-       MONTH_ID,
-       SWEEK_ID,
+       SWEEK_PART_ID,
        DAY_OF_CWEEK,
-       DAY_OF_IWEEK,
-       DAY_OF_MONTH,
+       DAY_OF_CMONTH,
        DAY_OF_CYEAR,
+       DAY_OF_IWEEK,
        DAY_OF_IYEAR,
+       DAY_OF_SWEEK_PART,
        DAY_OF_SWEEK,
+       DAY_OF_SWYEAR,
        DAY_OF_SMONTH,
-       DAY_OF_SYEAR,
+       DAY_OF_SMYEAR,
+       IS_FIRST_OF_CWEEK,
+       IS_LAST_OF_CWEEK,
+       IS_FIRST_OF_CMONTH,
+       IS_LAST_OF_CMONTH,
+       IS_FIRST_OF_CYEAR,
+       IS_LAST_OF_CYEAR,
+       IS_FIRST_OF_IWEEK,
+       IS_LAST_OF_IWEEK,
+       IS_FIRST_OF_IYEAR,
+       IS_LAST_OF_IYEAR,
+       IS_FIRST_OF_SWEEK_PART,
+       IS_LAST_OF_SWEEK_PART,
+       IS_FIRST_OF_SWEEK,
+       IS_LAST_OF_SWEEK,
+       IS_FIRST_OF_SWYEAR,
+       IS_LAST_OF_SWYEAR,
+       IS_FIRST_OF_SMONTH,
+       IS_LAST_OF_SMONTH,
+       IS_FIRST_OF_SMYEAR,
+       IS_LAST_OF_SMYEAR,
        START_DATE,
        END_DATE,
        TIME_SPAN,
-       DAY_NUM)
+       DAY_NUM,
+       DAY_SEQ)
     VALUES
       (0,
        TO_DATE('19000101', 'YYYYMMDD'),
-       C_DUMMY,
+       'DUMMY',
        0,
        0,
        0,
@@ -520,18 +629,42 @@ CREATE OR REPLACE PACKAGE BODY DIM_POPULATE_PACK IS
        0,
        0,
        0,
+       0,
+       0,
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
+       'N',
        TO_DATE('19000101', 'YYYYMMDD'),
        TO_DATE('19000101', 'YYYYMMDD'),
+       0,
        0,
        0);
 
-    --DIM_DATE_CYEAR
     INSERT INTO DIM_DATE_CYEAR
-      (CYEAR_ID, CYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, CYEAR_NUM)
+      (CYEAR_ID, CYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, CYEAR_NUM,CYEAR_SEQ)
       WITH MYDATE AS
        (SELECT C_START_DATE + LEVEL - 1 DAY
           FROM DUAL
         CONNECT BY C_START_DATE + LEVEL - 1 <= C_END_DATE)
+      SELECT O.CYEAR_ID, O.CYEAR_DESC, O.START_DATE, O.END_DATE, O.TIME_SPAN, O.CYEAR_NUM, ROWNUM CYEAR_SEQ
+      FROM (
       SELECT EXTRACT(YEAR FROM DAY) CYEAR_ID,
              EXTRACT(YEAR FROM DAY) CYEAR_DESC,
              MIN(DAY) START_DATE,
@@ -542,32 +675,65 @@ CREATE OR REPLACE PACKAGE BODY DIM_POPULATE_PACK IS
        WHERE EXTRACT(YEAR FROM DAY) BETWEEN EXTRACT(YEAR FROM L_START_DATE) AND
              EXTRACT(YEAR FROM L_END_DATE)
        GROUP BY EXTRACT(YEAR FROM DAY)
-       ORDER BY EXTRACT(YEAR FROM DAY);
+       ORDER BY 1
+       ) O;
 
-    --DIM_DATE_MONTH
-    INSERT INTO DIM_DATE_MONTH
-      (MONTH_ID,
-       MONTH_DESC,
+    INSERT INTO DIM_DATE_CMONTH
+      (CMONTH_ID,
+       CMONTH_DESC,
        CYEAR_ID,
-       MONTH_OF_CYEAR,
-       MONTH_NAME,
+       CMONTH_OF_CYEAR,
+       CMONTH_NAME,
+       IS_FIRST_OF_CYEAR,
+       IS_LAST_OF_CYEAR,
        START_DATE,
        END_DATE,
        TIME_SPAN,
-       MONTH_NUM)
+       CMONTH_NUM,
+       CMONTH_SEQ)
       WITH MYDATE AS
        (SELECT C_START_DATE + LEVEL - 1 DAY
           FROM DUAL
         CONNECT BY C_START_DATE + LEVEL - 1 <= C_END_DATE)
-      SELECT TO_NUMBER(TO_CHAR(M.DAY, 'YYYYMM')) MONTH_ID,
-             TO_CHAR(M.DAY, 'YYYY-MON') MONTH_DESC,
+      SELECT
+       CMONTH_ID,
+       CMONTH_DESC,
+       CYEAR_ID,
+       CMONTH_OF_CYEAR,
+       CMONTH_NAME,
+       IS_FIRST_OF_CYEAR,
+       IS_LAST_OF_CYEAR,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       CMONTH_NUM,
+       ROWNUM CMONTH_SEQ
+      FROM (
+      SELECT TO_NUMBER(TO_CHAR(M.DAY, 'YYYYMM')) CMONTH_ID,
+             TO_CHAR(M.DAY, 'YYYY-MON') CMONTH_DESC,
              Y.CYEAR_ID,
-             TO_NUMBER(TO_CHAR(M.DAY, 'MM')) MONTH_OF_CYEAR,
-             TO_CHAR(M.DAY, 'MON') MONTH_NAME,
+             TO_NUMBER(TO_CHAR(M.DAY, 'MM')) CMONTH_OF_CYEAR,
+             TO_CHAR(M.DAY, 'MON') CMONTH_NAME,
+             (CASE
+               WHEN TO_NUMBER(TO_CHAR(MIN(M.DAY), 'YYYYMM')) =
+                    MIN(TO_NUMBER(TO_CHAR(MIN(M.DAY), 'YYYYMM')))
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(MIN(M.DAY), 'YYYY'))) THEN
+                'Y'
+               ELSE
+                'N'
+             END) IS_FIRST_OF_CYEAR,
+             (CASE
+               WHEN TO_NUMBER(TO_CHAR(MAX(M.DAY), 'YYYYMM')) =
+                    MAX(TO_NUMBER(TO_CHAR(MAX(M.DAY), 'YYYYMM')))
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(MAX(M.DAY), 'YYYY'))) THEN
+                'Y'
+               ELSE
+                'N'
+             END) IS_LAST_OF_CYEAR,
              MIN(M.DAY) START_DATE,
              MAX(M.DAY) + 1 - 1 / 24 / 3600 END_DATE,
              COUNT(M.DAY) TIME_SPAN,
-             TO_NUMBER(TO_CHAR(M.DAY, 'MM')) MONTH_NUM
+             TO_NUMBER(TO_CHAR(M.DAY, 'MM')) CMONTH_NUM
         FROM MYDATE M
        INNER JOIN DIM_DATE_CYEAR Y
           ON TO_NUMBER(TO_CHAR(M.DAY, 'YYYY')) = Y.CYEAR_NUM
@@ -579,137 +745,58 @@ CREATE OR REPLACE PACKAGE BODY DIM_POPULATE_PACK IS
                 TO_NUMBER(TO_CHAR(M.DAY, 'MM')),
                 TO_CHAR(M.DAY, 'MON'),
                 TO_NUMBER(TO_CHAR(M.DAY, 'YYYYMM'))
-       ORDER BY TO_NUMBER(TO_CHAR(M.DAY, 'YYYYMM'));
+       ORDER BY 1
+       ) O ;
 
-    --DIM_DATE_SYEAR
-    INSERT INTO DIM_DATE_SYEAR
-      (SYEAR_ID, SYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, SYEAR_NUM)
-      WITH MYDATE AS
-       (SELECT C_START_DATE + LEVEL - 1 DAY
-          FROM DUAL
-        CONNECT BY C_START_DATE + LEVEL - 1 <= C_END_DATE)
-      SELECT /*+FULL(B)*/
-       B.YEAR SYEAR_ID,
-       TO_CHAR(B.YEAR) SYEAR_DESC,
-       MIN(A.DAY) START_DATE,
-       MAX(A.DAY) + 1 - 1 / 24 / 3600 END_DATE,
-       COUNT(A.DAY) TIME_SPAN,
-       B.YEAR SYEAR_NUM
-        FROM MYDATE A
-       INNER JOIN MONTH_WEEK_MAP@MYLINKAPP B
-          ON TO_NUMBER(TO_CHAR(A.DAY, 'YYYYMMDD')) = B.CALENDAR_DATE
-       GROUP BY B.YEAR
-       ORDER BY 1;
-
-    --DIM_DATE_SMONTH
-    INSERT INTO DIM_DATE_SMONTH
-      (SMONTH_ID,
-       SMONTH_DESC,
-       SYEAR_ID,
-       SMONTH_OF_SYEAR,
-       SMONTH_NAME,
-       START_DATE,
-       END_DATE,
-       TIME_SPAN,
-       SMONTH_NUM)
-      WITH MYDATE AS
-       (SELECT C_START_DATE + LEVEL - 1 DAY
-          FROM DUAL
-        CONNECT BY C_START_DATE + LEVEL - 1 <= C_END_DATE)
-      SELECT /*+FULL(B)*/
-       B.YEAR * 100 + B.MONTH SMONTH_ID,
-       TO_CHAR(B.YEAR) || C_DELIMITER || LPAD(B.MONTH, 2, '0') SMONTH_DESC,
-       B.YEAR SYEAR_ID,
-       ROW_NUMBER() OVER(PARTITION BY B.YEAR ORDER BY B.YEAR * 100 + B.MONTH) SMONTH_OF_SYEAR,
-       TO_CHAR(TO_DATE(B.YEAR * 10000 + B.MONTH * 100 + 1, 'YYYYMMDD'),
-               'MON') MONTH_NAME,
-       MIN(A.DAY) START_DATE,
-       MAX(A.DAY) + 1 - 1 / 24 / 3600 END_DATE,
-       COUNT(A.DAY) TIME_SPAN,
-       B.MONTH SMONTH_NUM
-        FROM MYDATE A
-       INNER JOIN MONTH_WEEK_MAP@MYLINKAPP B
-          ON TO_NUMBER(TO_CHAR(A.DAY, 'YYYYMMDD')) = B.CALENDAR_DATE
-       GROUP BY B.YEAR * 100 + B.MONTH,
-                TO_CHAR(B.YEAR) || C_DELIMITER || LPAD(B.MONTH, 2, '0'),
-                B.YEAR,
-                B.MONTH,
-                TO_CHAR(TO_DATE(B.YEAR * 10000 + B.MONTH * 100 + 1,
-                                'YYYYMMDD'),
-                        'MON')
-       ORDER BY 1;
-
-    --DIM_DATE_IYEAR
-    INSERT INTO DIM_DATE_IYEAR
-      (IYEAR_ID, IYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, IYEAR_NUM)
-      WITH MYDATE AS
-       (SELECT C_START_DATE + LEVEL - 1 DAY
-          FROM DUAL
-        CONNECT BY C_START_DATE + LEVEL - 1 <= C_END_DATE)
-      SELECT TO_NUMBER(TO_CHAR(DAY, 'IYYY')) IYEAR_ID,
-             TO_CHAR(DAY, 'IYYY') IYEAR_DESC,
-             MIN(DAY) START_DATE,
-             MAX(DAY) + 1 - 1 / 24 / 3600 END_DATE,
-             COUNT(DAY) TIME_SPAN,
-             TO_NUMBER(TO_CHAR(DAY, 'IYYY')) IYEAR_NUM
-        FROM MYDATE
-       WHERE TO_CHAR(DAY, 'IYYY') BETWEEN TO_CHAR(L_START_DATE, 'IYYY') AND
-             TO_CHAR(L_END_DATE, 'IYYY')
-       GROUP BY TO_CHAR(DAY, 'IYYY'), TO_NUMBER(TO_CHAR(DAY, 'IYYY'))
-       ORDER BY TO_NUMBER(TO_CHAR(DAY, 'IYYY'));
-
-    --dim_date_iweek
-    INSERT INTO DIM_DATE_IWEEK
-      (IWEEK_ID,
-       IWEEK_DESC,
-       IWEEK_OF_IYEAR,
-       IYEAR_ID,
-       START_DATE,
-       END_DATE,
-       TIME_SPAN,
-       IWEEK_NUM)
-      WITH MYDATE AS
-       (SELECT C_START_DATE + LEVEL - 1 DAY
-          FROM DUAL
-        CONNECT BY C_START_DATE + LEVEL - 1 <= C_END_DATE)
-      SELECT TO_CHAR(W.DAY, 'IYYYIW') IWEEK_ID,
-             TO_CHAR(W.DAY, 'IYYY-IW') IWEEK_DESC,
-             TO_CHAR(W.DAY, 'IW') IWEEK_OF_IYEAR,
-             Y.IYEAR_ID,
-             MIN(W.DAY) START_DATE,
-             MAX(W.DAY) + 1 - 1 / 24 / 3600 END_DATE,
-             COUNT(W.DAY) TIME_SPAN,
-             TO_CHAR(W.DAY, 'IW') IWEEK_NUM
-        FROM MYDATE W
-       INNER JOIN DIM_DATE_IYEAR Y
-          ON TO_CHAR(W.DAY, 'IYYY') = Y.IYEAR_NUM
-       WHERE TO_CHAR(W.DAY, 'IYYY-IW') BETWEEN
-             TO_CHAR(L_START_DATE, 'IYYY-IW') AND
-             TO_CHAR(L_END_DATE, 'IYYY-IW')
-       GROUP BY TO_CHAR(W.DAY, 'IYYY-IW'),
-                TO_CHAR(W.DAY, 'IW'),
-                Y.IYEAR_ID,
-                TO_CHAR(W.DAY, 'IYYYIW')
-       ORDER BY TO_CHAR(W.DAY, 'IYYYIW');
-
-    --dim_date_cweek
     INSERT INTO DIM_DATE_CWEEK
       (CWEEK_ID,
        CWEEK_DESC,
        CYEAR_ID,
        CWEEK_OF_CYEAR,
+       IS_FIRST_OF_CYEAR,
+       IS_LAST_OF_CYEAR,
        START_DATE,
        END_DATE,
        TIME_SPAN,
-       CWEEK_NUM)
+       CWEEK_NUM,
+       CWEEK_SEQ)
       WITH MYDATE AS
        (SELECT C_START_DATE + LEVEL - 1 DAY
           FROM DUAL
-        CONNECT BY C_START_DATE + LEVEL - 1 <= C_END_DATE)
+        CONNECT BY C_START_DATE + LEVEL - 1 <= L_END_DATE)
+      SELECT
+       CWEEK_ID,
+       CWEEK_DESC,
+       CYEAR_ID,
+       CWEEK_OF_CYEAR,
+       IS_FIRST_OF_CYEAR,
+       IS_LAST_OF_CYEAR,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       CWEEK_NUM,
+       ROWNUM CWEEK_SEQ
+      FROM (
       SELECT TO_CHAR(W.DAY, 'YYYYWW') CWEEK_ID,
              TO_CHAR(W.DAY, 'YYYY-WW') CWEEK_DESC,
              Y.CYEAR_ID,
              TO_CHAR(W.DAY, 'WW') CWEEK_OF_CYEAR,
+             (CASE
+               WHEN TO_NUMBER(TO_CHAR(MIN(W.DAY), 'YYYYWW')) =
+                    MIN(TO_NUMBER(TO_CHAR(MIN(W.DAY), 'YYYYWW')))
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(MIN(W.DAY), 'YYYY'))) THEN
+                'Y'
+               ELSE
+                'N'
+             END) IS_FIRST_OF_CYEAR,
+             (CASE
+               WHEN TO_NUMBER(TO_CHAR(MAX(W.DAY), 'YYYYWW')) =
+                    MAX(TO_NUMBER(TO_CHAR(MAX(W.DAY), 'YYYYWW')))
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(MAX(W.DAY), 'YYYY'))) THEN
+                'Y'
+               ELSE
+                'N'
+             END) IS_LAST_OF_CYEAR,
              MIN(W.DAY) START_DATE,
              MAX(W.DAY) + 1 - 1 / 24 / 3600 END_DATE,
              COUNT(W.DAY) TIME_SPAN,
@@ -724,111 +811,666 @@ CREATE OR REPLACE PACKAGE BODY DIM_POPULATE_PACK IS
                 Y.CYEAR_ID,
                 TO_CHAR(W.DAY, 'WW'),
                 TO_CHAR(W.DAY, 'YYYYWW')
-       ORDER BY TO_CHAR(W.DAY, 'YYYYWW');
+       ORDER BY 1
+       ) O ;
 
-    --DIM_DATE_SWEEK
+    --DIM_DATE_IYEAR
+    INSERT INTO DIM_DATE_IYEAR
+      (IYEAR_ID, IYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, IYEAR_NUM, IYEAR_SEQ)
+      WITH MYDATE AS
+       (SELECT C_START_DATE + LEVEL - 1 DAY
+          FROM DUAL
+        CONNECT BY C_START_DATE + LEVEL - 1 <= C_END_DATE)
+      SELECT
+      IYEAR_ID, IYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, IYEAR_NUM, ROWNUM IYEAR_SEQ
+      FROM (
+      SELECT TO_NUMBER(TO_CHAR(DAY, 'IYYY')) IYEAR_ID,
+             TO_CHAR(DAY, 'IYYY') IYEAR_DESC,
+             MIN(DAY) START_DATE,
+             MAX(DAY) + 1 - 1 / 24 / 3600 END_DATE,
+             COUNT(DAY) TIME_SPAN,
+             TO_NUMBER(TO_CHAR(DAY, 'IYYY')) IYEAR_NUM
+        FROM MYDATE
+       WHERE TO_CHAR(DAY, 'IYYY') BETWEEN TO_CHAR(L_START_DATE, 'IYYY') AND
+             TO_CHAR(L_END_DATE, 'IYYY')
+       GROUP BY TO_CHAR(DAY, 'IYYY'), TO_NUMBER(TO_CHAR(DAY, 'IYYY'))
+       ORDER BY 1
+       ) O ;
+
+    --dim_date_iweek
+    INSERT INTO DIM_DATE_IWEEK
+      (IWEEK_ID,
+       IWEEK_DESC,
+       IWEEK_OF_IYEAR,
+       IYEAR_ID,
+       IS_FIRST_OF_IYEAR,
+       IS_LAST_OF_IYEAR,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       IWEEK_NUM,
+       IWEEK_SEQ)
+      WITH MYDATE AS
+       (SELECT C_START_DATE + LEVEL - 1 DAY
+          FROM DUAL
+        CONNECT BY C_START_DATE + LEVEL - 1 <= C_END_DATE)
+      SELECT
+       IWEEK_ID,
+       IWEEK_DESC,
+       IWEEK_OF_IYEAR,
+       IYEAR_ID,
+       IS_FIRST_OF_IYEAR,
+       IS_LAST_OF_IYEAR,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       IWEEK_NUM,
+       ROWNUM IWEEK_SEQ
+      FROM (
+      SELECT TO_NUMBER(TO_CHAR(W.DAY, 'IYYYIW')) IWEEK_ID,
+             TO_CHAR(W.DAY, 'IYYY-IW') IWEEK_DESC,
+             TO_CHAR(W.DAY, 'IW') IWEEK_OF_IYEAR,
+             TO_NUMBER(TO_CHAR(W.DAY, 'IYYY')) IYEAR_ID,
+             (CASE
+               WHEN TO_NUMBER(TO_CHAR(MIN(W.DAY), 'IYYYIW')) =
+                    MIN(TO_NUMBER(TO_CHAR(MIN(W.DAY), 'IYYYIW')))
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(MIN(W.DAY), 'IYYY'))) THEN
+                'Y'
+               ELSE
+                'N'
+             END) IS_FIRST_OF_IYEAR,
+             (CASE
+               WHEN TO_NUMBER(TO_CHAR(MAX(W.DAY), 'IYYYIW')) =
+                    MAX(TO_NUMBER(TO_CHAR(MAX(W.DAY), 'IYYYIW')))
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(MAX(W.DAY), 'IYYY'))) THEN
+                'Y'
+               ELSE
+                'N'
+             END) IS_LAST_OF_IYEAR,
+             MIN(W.DAY) START_DATE,
+             MAX(W.DAY) + 1 - 1 / 24 / 3600 END_DATE,
+             COUNT(W.DAY) TIME_SPAN,
+             TO_CHAR(W.DAY, 'IW') IWEEK_NUM
+        FROM MYDATE W
+       WHERE TO_CHAR(W.DAY, 'IYYY-IW') BETWEEN
+             TO_CHAR(L_START_DATE, 'IYYY-IW') AND
+             TO_CHAR(L_END_DATE, 'IYYY-IW')
+       GROUP BY TO_CHAR(W.DAY, 'IYYY-IW'),
+                TO_CHAR(W.DAY, 'IW'),
+                TO_NUMBER(TO_CHAR(W.DAY, 'IYYY')),
+                TO_CHAR(W.DAY, 'IYYYIW')
+       ORDER BY 1
+       ) O ;
+
+    -- 7th Calendar
+    INSERT INTO DIM_DATE_SMYEAR
+      (SMYEAR_ID, SMYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, SMYEAR_NUM, SMYEAR_SEQ)
+      WITH MYCTE AS
+       (SELECT YEAR SMYEAR, TO_DATE(CALENDAR_DATE, 'YYYYMMDD') DAY2
+          FROM MONTH_WEEK_MAP@MYLINKAPP A)
+      SELECT SMYEAR_ID, SMYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, SMYEAR_NUM, ROWNUM SMYEAR_SEQ
+      FROM (
+      SELECT S.SMYEAR SMYEAR_ID,
+             TO_CHAR(S.SMYEAR) SMYEAR_DESC,
+             MIN(S.DAY2) START_DATE,
+             MAX(S.DAY2) + 1 - 1 / 24 / 3600 END_DATE,
+             COUNT(S.DAY2) TIME_SPAN,
+             S.SMYEAR SMYEAR_NUM
+        FROM MYCTE S
+       GROUP BY S.SMYEAR
+       ORDER BY 1
+       ) O ;
+
+    INSERT INTO DIM_DATE_SMONTH
+      (SMONTH_ID,
+       SMONTH_DESC,
+       SMYEAR_ID,
+       SMONTH_OF_SMYEAR,
+       SMONTH_NAME,
+       IS_FIRST_OF_SMYEAR,
+       IS_LAST_OF_SMYEAR,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       SMONTH_NUM,
+       SMONTH_SEQ)
+      WITH MYCTE AS
+       (SELECT CASE
+                 WHEN MONTH = 12 AND WEEK = 1 THEN
+                  YEAR + 1
+                 WHEN MONTH = 1 AND WEEK >= 52 THEN
+                  YEAR - 1
+                 ELSE
+                  YEAR
+               END SMYEAR,
+               MONTH SMONTH,
+               TO_DATE(CALENDAR_DATE, 'YYYYMMDD') DAY2
+          FROM MONTH_WEEK_MAP@MYLINKAPP A)
+      SELECT
+       SMONTH_ID,
+       SMONTH_DESC,
+       SMYEAR_ID,
+       SMONTH_OF_SMYEAR,
+       SMONTH_NAME,
+       IS_FIRST_OF_SMYEAR,
+       IS_LAST_OF_SMYEAR,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       SMONTH_NUM,
+       ROWNUM SMONTH_SEQ
+      FROM (
+      SELECT S.SMYEAR * 100 + S.SMONTH SMONTH_ID,
+             TO_CHAR(TO_DATE(TO_CHAR(S.SMYEAR * 10000 + S.SMONTH * 100 + 1),
+                             'YYYYMMDD'),
+                     'YYYY-MON') SMONTH_DESC,
+             S.SMYEAR SMYEAR_ID,
+             S.SMONTH SMONTH_OF_SMYEAR,
+             TO_CHAR(TO_DATE(TO_CHAR(S.SMYEAR * 10000 + S.SMONTH * 100 + 1),
+                             'YYYYMMDD'),
+                     'MON') SMONTH_NAME,
+             (CASE
+               WHEN S.SMYEAR * 100 + S.SMONTH = MIN(S.SMYEAR * 100 + S.SMONTH)
+                OVER(PARTITION BY S.SMYEAR) THEN
+                'Y'
+               ELSE
+                'N'
+             END) IS_FIRST_OF_SMYEAR,
+             (CASE
+               WHEN S.SMYEAR * 100 + S.SMONTH = MAX(S.SMYEAR * 100 + S.SMONTH)
+                OVER(PARTITION BY S.SMYEAR) THEN
+                'Y'
+               ELSE
+                'N'
+             END) IS_LAST_OF_SMYEAR,
+             MIN(S.DAY2) START_DATE,
+             MAX(S.DAY2) + 1 - 1 / 24 / 3600 END_DATE,
+             COUNT(*) TIME_SPAN,
+             S.SMONTH SMONTH_NUM
+        FROM MYCTE S
+       GROUP BY S.SMYEAR * 100 + S.SMONTH,
+                TO_CHAR(TO_DATE(TO_CHAR(S.SMYEAR * 10000 + S.SMONTH * 100 + 1),
+                                'YYYYMMDD'),
+                        'YYYY-MON'),
+                S.SMYEAR,
+                S.SMONTH,
+                TO_CHAR(S.DAY2, 'MON'),
+                TO_CHAR(TO_DATE(TO_CHAR(S.SMYEAR * 10000 + S.SMONTH * 100 + 1),
+                                'YYYYMMDD'),
+                        'MON'),
+                S.SMONTH
+         ORDER BY 1
+         ) O ;
+
+    INSERT INTO DIM_DATE_SWYEAR
+      (SWYEAR_ID, SWYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, SWYEAR_NUM, SWYEAR_SEQ)
+      WITH MYCTE AS
+       (SELECT CASE
+                 WHEN MONTH = 12 AND WEEK = 1 THEN
+                  YEAR + 1
+                 WHEN MONTH = 1 AND WEEK >= 52 THEN
+                  YEAR - 1
+                 ELSE
+                  YEAR
+               END SWYEAR,
+               TO_DATE(CALENDAR_DATE, 'YYYYMMDD') DAY2
+          FROM MONTH_WEEK_MAP@MYLINKAPP A)
+      SELECT SWYEAR_ID, SWYEAR_DESC, START_DATE, END_DATE, TIME_SPAN, SWYEAR_NUM, ROWNUM SWYEAR_SEQ
+      FROM (
+      SELECT S.SWYEAR SWYEAR_ID,
+             TO_CHAR(S.SWYEAR) SWYEAR_DESC,
+             MIN(S.DAY2) START_DATE,
+             MAX(S.DAY2) + 1 - 1 / 24 / 3600 END_DATE,
+             COUNT(S.DAY2) TIME_SPAN,
+             S.SWYEAR SWYEAR_NUM
+        FROM MYCTE S
+       GROUP BY S.SWYEAR
+       ORDER BY 1
+       ) O ;
+
     INSERT INTO DIM_DATE_SWEEK
       (SWEEK_ID,
        SWEEK_DESC,
-       SMONTH_ID,
-       SWEEK_OF_SMONTH,
-       SWEEK_OF_SYEAR,
+       SWYEAR_ID,
+       SWEEK_OF_SWYEAR,
+       IS_FIRST_OF_SWYEAR,
+       IS_LAST_OF_SWYEAR,
        START_DATE,
        END_DATE,
        TIME_SPAN,
-       SWEEK_NUM)
-      WITH MYDATE AS
-       (SELECT C_START_DATE + LEVEL - 1 DAY
-          FROM DUAL
-        CONNECT BY C_START_DATE + LEVEL - 1 <= C_END_DATE)
-      SELECT O.YEAR * 100 + ROW_NUMBER() OVER(PARTITION BY O.YEAR ORDER BY O.SWEEK) SWEEK_ID,
-             TO_CHAR(O.YEAR) || C_DELIMITER ||
-             LPAD(ROW_NUMBER() OVER(PARTITION BY O.YEAR ORDER BY O.SWEEK),
-                  2,
-                  '0') SWEEK_DESC,
-             O.YEAR * 100 + O.MONTH SMONTH_ID,
-             ROW_NUMBER() OVER(PARTITION BY O.YEAR, O.MONTH ORDER BY O.SWEEK) SWEEK_OF_SMONTH,
-             ROW_NUMBER() OVER(PARTITION BY O.YEAR ORDER BY O.SWEEK) SWEEK_OF_SYEAR,
-             O.START_DATE,
-             O.END_DATE,
-             O.TIME_SPAN,
-             O.WEEK SWEEK_NUM
-        FROM (SELECT /*+FULL(B)*/
-               B.YEAR,
-               B.MONTH,
-               B.WEEK,
-               B.YEAR * 10000 + B.MONTH * 100 + B.WEEK SWEEK,
-               MIN(A.DAY) START_DATE,
-               MAX(A.DAY) + 1 - 1 / 24 / 3600 END_DATE,
-               COUNT(A.DAY) TIME_SPAN
-                FROM MYDATE A
-               INNER JOIN MONTH_WEEK_MAP@MYLINKAPP B
-                  ON TO_NUMBER(TO_CHAR(A.DAY, 'YYYYMMDD')) = B.CALENDAR_DATE
-               GROUP BY B.YEAR, B.MONTH, B.WEEK) O
-       ORDER BY 1;
+       SWEEK_NUM,
+       SWEEK_SEQ)
+      WITH MYCTE AS
+       (SELECT CASE
+                 WHEN MONTH = 12 AND WEEK = 1 THEN
+                  YEAR + 1
+                 WHEN MONTH = 1 AND WEEK >= 52 THEN
+                  YEAR - 1
+                 ELSE
+                  YEAR
+               END SWYEAR,
+               MONTH SMONTH,
+               WEEK SWEEK,
+               TO_DATE(CALENDAR_DATE, 'YYYYMMDD') DAY2
+          FROM MONTH_WEEK_MAP@MYLINKAPP A)
+      SELECT
+       SWEEK_ID,
+       SWEEK_DESC,
+       SWYEAR_ID,
+       SWEEK_OF_SWYEAR,
+       IS_FIRST_OF_SWYEAR,
+       IS_LAST_OF_SWYEAR,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       SWEEK_NUM,
+       ROWNUM SWEEK_SEQ
+      FROM (
+      SELECT S.SWYEAR * 100 + S.SWEEK SWEEK_ID,
+             TO_CHAR(S.SWYEAR * 100 + S.SWEEK) SWEEK_DESC,
+             S.SWYEAR SWYEAR_ID,
+             S.SWEEK SWEEK_OF_SWYEAR,
+             (CASE
+               WHEN S.SWYEAR * 100 + S.SWEEK = MIN(S.SWYEAR * 100 + S.SWEEK)
+                OVER(PARTITION BY S.SWYEAR) THEN
+                'Y'
+               ELSE
+                'N'
+             END) IS_FIRST_OF_SWYEAR,
+             (CASE
+               WHEN S.SWYEAR * 100 + S.SWEEK = MAX(S.SWYEAR * 100 + S.SWEEK)
+                OVER(PARTITION BY S.SWYEAR) THEN
+                'Y'
+               ELSE
+                'N'
+             END) IS_LAST_OF_SWYEAR,
+             MIN(S.DAY2) START_DATE,
+             MAX(S.DAY2) + 1 - 1 / 24 / 3600 END_DATE,
+             COUNT(*) TIME_SPAN,
+             S.SWEEK SWEEK_NUM
+        FROM MYCTE S
+       GROUP BY S.SWYEAR * 100 + S.SWEEK,
+                TO_CHAR(S.SWYEAR * 100 + S.SWEEK),
+                S.SWYEAR,
+                S.SWEEK
+        ORDER BY 1
+        ) O ;
 
-    --DIM_DATE_DAY
+    INSERT INTO DIM_DATE_SWEEK_PART
+      (SWEEK_PART_ID,
+       SWEEK_PART_DESC,
+       SMONTH_ID,
+       SWEEK_ID,
+       SWEEK_PART_OF_SMONTH,
+       SWEEK_PART_OF_SWEEK,
+       IS_FIRST_OF_SMONTH,
+       IS_LAST_OF_SMONTH,
+       IS_FIRST_OF_SWEEK,
+       IS_LAST_OF_SWEEK,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       SWEEK_PART_NUM,
+       SWEEK_PART_SEQ)
+      WITH MYCTE AS
+       (SELECT CASE
+                 WHEN MONTH = 12 AND WEEK = 1 THEN
+                  YEAR + 1
+                 WHEN MONTH = 1 AND WEEK >= 52 THEN
+                  YEAR - 1
+                 ELSE
+                  YEAR
+               END SWYEAR,
+               YEAR SMYEAR,
+               MONTH SMONTH,
+               WEEK SWEEK,
+               TO_DATE(CALENDAR_DATE, 'YYYYMMDD') DAY2
+          FROM MONTH_WEEK_MAP@MYLINKAPP A)
+      SELECT
+       SWEEK_PART_ID,
+       SWEEK_PART_DESC,
+       SMONTH_ID,
+       SWEEK_ID,
+       SWEEK_PART_OF_SMONTH,
+       SWEEK_PART_OF_SWEEK,
+       IS_FIRST_OF_SMONTH,
+       IS_LAST_OF_SMONTH,
+       IS_FIRST_OF_SWEEK,
+       IS_LAST_OF_SWEEK,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       SWEEK_PART_NUM,
+       ROWNUM SWEEK_PART_SEQ
+      FROM (
+      SELECT S.SMYEAR * 100 + ROW_NUMBER() OVER(PARTITION BY S.SMYEAR ORDER BY MIN(S.DAY2)) SWEEK_PART_ID,
+             S.SMYEAR * 100 + ROW_NUMBER() OVER(PARTITION BY S.SMYEAR ORDER BY MIN(S.DAY2)) SWEEK_PART_DESC,
+             S.SMYEAR * 100 + S.SMONTH SMONTH_ID,
+             S.SWYEAR * 100 + S.SWEEK SWEEK_ID,
+             ROW_NUMBER() OVER(PARTITION BY S.SMYEAR, S.SMONTH ORDER BY MIN(S.DAY2)) SWEEK_PART_OF_SMONTH,
+             ROW_NUMBER() OVER(PARTITION BY S.SWYEAR, S.SWEEK ORDER BY MIN(S.DAY2)) SWEEK_PART_OF_SWEEK,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SMYEAR, S.SMONTH ORDER BY MIN(S.DAY2)) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_SMONTH,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SMYEAR,
+                         S.SMONTH ORDER BY MIN(S.DAY2) DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_SMONTH,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SWYEAR, S.SWEEK ORDER BY MIN(S.DAY2)) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_SWEEK,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SWYEAR,
+                         S.SWEEK ORDER BY MIN(S.DAY2) DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_SWEEK,
+             MIN(S.DAY2) START_DATE,
+             MAX(S.DAY2) + 1 - 1 / 24 / 3600 END_DATE,
+             COUNT(*) TIME_SPAN,
+             ROW_NUMBER() OVER(PARTITION BY S.SMYEAR ORDER BY MIN(S.DAY2)) SWEEK_PART_NUM
+        FROM MYCTE S
+       GROUP BY S.SMYEAR, S.SMONTH, S.SWYEAR, S.SWEEK
+       ORDER BY 1
+       ) O ;
+
+    --  DAY
     INSERT INTO DIM_DATE_DAY
       (DATE_ID,
        DAY_DATE,
+       DAY_DESC,
        CWEEK_ID,
+       CMONTH_ID,
        IWEEK_ID,
-       MONTH_ID,
-       SWEEK_ID,
+       SWEEK_PART_ID,
        DAY_OF_CWEEK,
-       DAY_OF_IWEEK,
-       DAY_OF_MONTH,
+       DAY_OF_CMONTH,
        DAY_OF_CYEAR,
+       DAY_OF_IWEEK,
        DAY_OF_IYEAR,
+       DAY_OF_SWEEK_PART,
        DAY_OF_SWEEK,
+       DAY_OF_SWYEAR,
        DAY_OF_SMONTH,
-       DAY_OF_SYEAR,
+       DAY_OF_SMYEAR,
+       IS_FIRST_OF_CWEEK,
+       IS_LAST_OF_CWEEK,
+       IS_FIRST_OF_CMONTH,
+       IS_LAST_OF_CMONTH,
+       IS_FIRST_OF_CYEAR,
+       IS_LAST_OF_CYEAR,
+       IS_FIRST_OF_IWEEK,
+       IS_LAST_OF_IWEEK,
+       IS_FIRST_OF_IYEAR,
+       IS_LAST_OF_IYEAR,
+       IS_FIRST_OF_SWEEK_PART,
+       IS_LAST_OF_SWEEK_PART,
+       IS_FIRST_OF_SWEEK,
+       IS_LAST_OF_SWEEK,
+       IS_FIRST_OF_SWYEAR,
+       IS_LAST_OF_SWYEAR,
+       IS_FIRST_OF_SMONTH,
+       IS_LAST_OF_SMONTH,
+       IS_FIRST_OF_SMYEAR,
+       IS_LAST_OF_SMYEAR,
        START_DATE,
        END_DATE,
        TIME_SPAN,
+       DAY_NUM,
+       DAY_SEQ)
+      WITH MYCTE AS
+       (SELECT CASE
+                 WHEN MONTH = 12 AND WEEK = 1 THEN
+                  YEAR + 1
+                 WHEN MONTH = 1 AND WEEK >= 52 THEN
+                  YEAR - 1
+                 ELSE
+                  YEAR
+               END SWYEAR,
+               YEAR SMYEAR,
+               MONTH SMONTH,
+               WEEK SWEEK,
+               TO_DATE(CALENDAR_DATE, 'YYYYMMDD') DAY2,
+               A.*
+          FROM MONTH_WEEK_MAP@MYLINKAPP A),
+      MYCTE2 AS
+       (SELECT A.*,
+               DENSE_RANK() OVER(PARTITION BY SMYEAR ORDER BY SWYEAR, SWEEK, TO_NUMBER(TO_CHAR(DAY2, 'YYYYMM'))) SWEEK_PART
+          FROM MYCTE A) --SELECT * FROM mycte2 ORDER BY day2
+      SELECT
+      DATE_ID,
+       DAY_DATE,
        DAY_DESC,
-       DAY_NUM)
-      WITH MYDATE AS
-       (SELECT C_START_DATE + LEVEL - 1 DAY
-          FROM DUAL
-        CONNECT BY C_START_DATE + LEVEL - 1 <= C_END_DATE)
-      SELECT /*+ordered*/
-       TO_CHAR(D.DAY, 'YYYYMMDD') DATE_ID,
-       D.DAY DAY_DATE,
-       CW.CWEEK_ID,
-       IW.IWEEK_ID,
-       M.MONTH_ID,
-       SW.SWEEK_ID,
-       D.DAY - CW.START_DATE + 1 DAY_OF_CWEEK,
-       D.DAY - IW.START_DATE + 1 DAY_OF_IWEEK,
-       TO_CHAR(D.DAY, 'DD') DAY_OF_MONTH,
-       TO_CHAR(D.DAY, 'DDD') DAY_OF_CYEAR,
-       D.DAY - IY.START_DATE DAY_OF_IYEAR,
-       D.DAY - SW.START_DATE + 1 DAY_OF_SWEEK,
-       D.DAY - SM.START_DATE + 1 DAY_OF_SMONTH,
-       D.DAY - SY.START_DATE + 1 DAY_OF_SYEAR,
-       D.DAY START_DATE,
-       D.DAY + 1 - 1 / 24 / 3600 END_DATE,
-       1 TIME_SPAN,
-       TO_CHAR(D.DAY, 'YYYY-MON-DD') DAY_DESC,
-       TO_CHAR(D.DAY, 'YYYYMMDD') DAY_NUM
-        FROM MYDATE D
-       INNER JOIN DIM_DATE_MONTH M
-          ON TO_CHAR(D.DAY, 'YYYYMM') = M.MONTH_ID
-       INNER JOIN DIM_DATE_CWEEK CW
-          ON TO_CHAR(D.DAY, 'YYYYWW') = CW.CWEEK_ID
-       INNER JOIN DIM_DATE_IWEEK IW
-          ON TO_CHAR(D.DAY, 'IYYYIW') = IW.IWEEK_ID
-       INNER JOIN DIM_DATE_IYEAR IY
-          ON IW.IYEAR_ID = IY.IYEAR_ID
-       INNER JOIN DIM_DATE_SWEEK SW
-          ON D.DAY BETWEEN SW.START_DATE AND SW.END_DATE
-       INNER JOIN DIM_DATE_SMONTH SM
-          ON SW.SMONTH_ID = SM.SMONTH_ID
-       INNER JOIN DIM_DATE_SYEAR SY
-          ON SM.SYEAR_ID = SY.SYEAR_ID
-       WHERE D.DAY BETWEEN L_START_DATE AND L_END_DATE
-       ORDER BY TO_CHAR(D.DAY, 'YYYYMMDD');
+       CWEEK_ID,
+       CMONTH_ID,
+       IWEEK_ID,
+       SWEEK_PART_ID,
+       DAY_OF_CWEEK,
+       DAY_OF_CMONTH,
+       DAY_OF_CYEAR,
+       DAY_OF_IWEEK,
+       DAY_OF_IYEAR,
+       DAY_OF_SWEEK_PART,
+       DAY_OF_SWEEK,
+       DAY_OF_SWYEAR,
+       DAY_OF_SMONTH,
+       DAY_OF_SMYEAR,
+       IS_FIRST_OF_CWEEK,
+       IS_LAST_OF_CWEEK,
+       IS_FIRST_OF_CMONTH,
+       IS_LAST_OF_CMONTH,
+       IS_FIRST_OF_CYEAR,
+       IS_LAST_OF_CYEAR,
+       IS_FIRST_OF_IWEEK,
+       IS_LAST_OF_IWEEK,
+       IS_FIRST_OF_IYEAR,
+       IS_LAST_OF_IYEAR,
+       IS_FIRST_OF_SWEEK_PART,
+       IS_LAST_OF_SWEEK_PART,
+       IS_FIRST_OF_SWEEK,
+       IS_LAST_OF_SWEEK,
+       IS_FIRST_OF_SWYEAR,
+       IS_LAST_OF_SWYEAR,
+       IS_FIRST_OF_SMONTH,
+       IS_LAST_OF_SMONTH,
+       IS_FIRST_OF_SMYEAR,
+       IS_LAST_OF_SMYEAR,
+       START_DATE,
+       END_DATE,
+       TIME_SPAN,
+       DAY_NUM,
+       ROWNUM DAY_SEQ
+      FROM (
+      SELECT TO_NUMBER(TO_CHAR(DAY2, 'YYYYMMDD')) DATE_ID,
+             DAY2 DAY_DATE,
+             TO_CHAR(S.DAY2, 'YYYY-MON-DD') DAY_DESC,
+             TO_NUMBER(TO_CHAR(S.DAY2, 'YYYYWW')) CWEEK_ID,
+             TO_NUMBER(TO_CHAR(S.DAY2, 'YYYYMM')) CMONTH_ID,
+             TO_NUMBER(TO_CHAR(S.DAY2, 'IYYYIW')) IWEEK_ID,
+             S.SMYEAR * 100 + S.SWEEK_PART SWEEK_PART_ID,
+             ROW_NUMBER() OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'YYYYWW')) ORDER BY S.DAY2) DAY_OF_CWEEK,
+             ROW_NUMBER() OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'YYYYMM')) ORDER BY S.DAY2) DAY_OF_CMONTH,
+             ROW_NUMBER() OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'YYYY')) ORDER BY S.DAY2) DAY_OF_CYEAR,
+             ROW_NUMBER() OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'IYYYIW')) ORDER BY S.DAY2) DAY_OF_IWEEK,
+             ROW_NUMBER() OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'IYYY')) ORDER BY S.DAY2) DAY_OF_IYEAR,
+             ROW_NUMBER() OVER(PARTITION BY S.SMYEAR * 100 + S.SWEEK_PART ORDER BY S.DAY2) DAY_OF_SWEEK_PART,
+             ROW_NUMBER() OVER(PARTITION BY S.SWYEAR * 100 + S.SWEEK ORDER BY S.DAY2) DAY_OF_SWEEK,
+             ROW_NUMBER() OVER(PARTITION BY S.SWYEAR * 100 ORDER BY S.DAY2) DAY_OF_SWYEAR,
+             ROW_NUMBER() OVER(PARTITION BY S.SMYEAR * 100 + S.SMONTH ORDER BY S.DAY2) DAY_OF_SMONTH,
+             ROW_NUMBER() OVER(PARTITION BY S.SMYEAR ORDER BY S.DAY2) DAY_OF_SMYEAR,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'YYYYWW'))
+                         ORDER BY S.DAY2) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_CWEEK,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'YYYYWW'))
+                         ORDER BY S.DAY2 DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_CWEEK,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'YYYYMM'))
+                         ORDER BY S.DAY2) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_CMONTH,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'YYYYMM'))
+                         ORDER BY S.DAY2 DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_CMONTH,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'YYYY')) ORDER BY
+                         S.DAY2) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_CYEAR,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'YYYY')) ORDER BY
+                         S.DAY2 DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_CYEAR,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'IYYYIW'))
+                         ORDER BY S.DAY2) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_IWEEK,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'IYYYIW'))
+                         ORDER BY S.DAY2 DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_IWEEK,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'IYYY')) ORDER BY
+                         S.DAY2) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_IYEAR,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY TO_NUMBER(TO_CHAR(S.DAY2, 'IYYY')) ORDER BY
+                         S.DAY2 DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_IYEAR,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SMYEAR * 100 + S.SWEEK_PART ORDER BY
+                         S.DAY2) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_SWEEK_PART,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SMYEAR * 100 + S.SWEEK_PART ORDER BY
+                         S.DAY2 DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_SWEEK_PART,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SWYEAR * 100 + S.SWEEK ORDER BY S.DAY2) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_SWEEK,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SWYEAR * 100 + S.SWEEK ORDER BY S.DAY2 DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_SWEEK,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SWYEAR * 100 ORDER BY S.DAY2) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_SWYEAR,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SWYEAR * 100 ORDER BY S.DAY2 DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_SWYEAR,
+             CASE
+               WHEN ROW_NUMBER() OVER(PARTITION BY S.SMYEAR * 100 + S.SMONTH
+                         ORDER BY S.DAY2) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_SMONTH,
+             CASE
+               WHEN ROW_NUMBER() OVER(PARTITION BY S.SMYEAR * 100 + S.SMONTH
+                         ORDER BY S.DAY2 DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_SMONTH,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SMYEAR * 100 ORDER BY S.DAY2) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_FIRST_OF_SMYEAR,
+             CASE
+               WHEN ROW_NUMBER()
+                OVER(PARTITION BY S.SMYEAR * 100 ORDER BY S.DAY2 DESC) = 1 THEN
+                'Y'
+               ELSE
+                'N'
+             END IS_LAST_OF_SMYEAR,
+             DAY2 START_DATE,
+             S.DAY2 + 1 - 1 / 24 / 3600 END_DATE,
+             1 TIME_SPAN,
+             TO_NUMBER(TO_CHAR(S.DAY2, 'DD')) DAY_NUM,
+             ROWNUM DAY_SEQ
+        FROM MYCTE2 S
+       ORDER BY DAY2) O;
 
     COMMIT;
 
@@ -1746,14 +2388,11 @@ CREATE OR REPLACE PACKAGE BODY DIM_POPULATE_PACK IS
                             A.SIZE_CODE,
                             A.PREPACK_QTY,
                             A.STYLE_COLOR_ID,
-                            A.STYLE_YEAR,
-                            B.SEASON_NAME,
                             LISTAGG(A.SIZE_CODE || C_DELIMITER ||
                                     A.PREPACK_QTY,
                                     ',') WITHIN GROUP(ORDER BY A.SIZE_CODE) OVER(PARTITION BY A.PREPACK_CODE, A.TYPE) SOURCE_BUSKEY
                              FROM ALLOCATE_PREPACK_UPLOAD@MYLINKAPP A
-                            INNER JOIN SEASON@MYLINKAPP B
-                               ON A.STYLE_SEASON_ID = B.SEASON_ID) O
+                             WHERE STYLE_COLOR_ID IS NOT NULL) O
                     INNER JOIN DIM_STYLE_COLOR SC
                        ON O.STYLE_COLOR_ID = SC.ORI_STYLE_COLOR_ID
                     INNER JOIN DIM_STYLE_COLOR_SIZE SCS
@@ -2423,10 +3062,10 @@ CREATE OR REPLACE PACKAGE BODY DIM_POPULATE_PACK IS
             T.PROD_ATTR_VALUE20=S.PROD_ATTR_VALUE20,
             T.SOURCE_BUSKEY    =S.SOURCE_BUSKEY' USING L_PROD_ATTR_ID,L_PROD_ATTR_ID,L_PROD_ATTR_ID;
 
-        EXECUTE IMMEDIATE 
+        EXECUTE IMMEDIATE
 'BEGIN
   DELETE FROM DIM_PROD_ATTR_VAL_REL R
-  WHERE EXISTS(SELECT 1 FROM DIM_PROD_ATTR_VALUE V 
+  WHERE EXISTS(SELECT 1 FROM DIM_PROD_ATTR_VALUE V
         WHERE R.PROD_ATTR_VALUE_ID=V.PROD_ATTR_VALUE_ID
         AND V.PROD_ATTR_ID=:PROD_ATTR_ID);
   MERGE INTO DIM_PROD_ATTR_VAL_REL T
@@ -2925,12 +3564,12 @@ END;' USING L_PROD_ATTR_ID,L_PROD_ATTR_ID;
             T.YEARSEASON_ATTR_VALUE20=S.YEARSEASON_ATTR_VALUE20,
             T.SOURCE_BUSKEY          =S.SOURCE_BUSKEY ' USING L_YEARSEASON_ATTR_ID,L_YEARSEASON_ATTR_ID,L_YEARSEASON_ATTR_ID;
 
-        EXECUTE IMMEDIATE 
-'BEGIN        
+        EXECUTE IMMEDIATE
+'BEGIN
   DELETE FROM DIM_YEARSEASON_ATTR_VAL_REL R
-  WHERE EXISTS(SELECT 1 FROM DIM_YEARSEASON_ATTR_VALUE V 
+  WHERE EXISTS(SELECT 1 FROM DIM_YEARSEASON_ATTR_VALUE V
         WHERE R.YEARSEASON_ATTR_VALUE_ID=V.YEARSEASON_ATTR_VALUE_ID
-        AND V.YEARSEASON_ATTR_ID=:YEARSEASON_ATTR_ID);   
+        AND V.YEARSEASON_ATTR_ID=:YEARSEASON_ATTR_ID);
   MERGE INTO DIM_YEARSEASON_ATTR_VAL_REL T
   USING(' || L_PAVR_SQL || ') S
   ON (T.YEARSEASON_ATTR_VALUE_ID=S.YEARSEASON_ATTR_VALUE_ID AND T.STYLE_YEAR_SEASON_ID=S.STYLE_YEAR_SEASON_ID)
@@ -3420,9 +4059,9 @@ END;' USING L_YEARSEASON_ATTR_ID, L_YEARSEASON_ATTR_ID;
           T.LOC_ATTR_VALUE20   =S.LOC_ATTR_VALUE20 ,
           T.SOURCE_BUSKEY      =S.SOURCE_BUSKEY' USING L_LOC_ATTR_ID,L_LOC_ATTR_ID,L_LOC_ATTR_ID;
 
-        EXECUTE IMMEDIATE 
+        EXECUTE IMMEDIATE
 'BEGIN
-  DELETE FROM DIM_LOC_ATTR_VAL_REL R 
+  DELETE FROM DIM_LOC_ATTR_VAL_REL R
   WHERE EXISTS(SELECT 1 FROM DIM_LOC_ATTR_VALUE V
         WHERE R.LOC_ATTR_VALUE_ID=V.LOC_ATTR_VALUE_ID
         AND V.LOC_ATTR_ID=:LOC_ATTR_ID);
@@ -7040,6 +7679,51 @@ WHEN NOT MATCHED THEN
     COMMIT;
   END POP_DIM_RULE;
 
+  PROCEDURE POP_DIM_CLUSTER_SEQUENCE(P_IS_INITIAL BOOLEAN DEFAULT TRUE)
+    IS
+    BEGIN
+
+      IF P_IS_INITIAL THEN
+        DISABLE_ALL_CONS;
+
+        EXECUTE IMMEDIATE 'TRUNCATE TABLE DIM_CLUSTER_SEQUENCE';
+
+        RELY_ALL_CONS;
+
+        RESET_SEQUENCE('SEQ_CLUSTER_SEQUENCE');
+
+        INSERT INTO DIM_CLUSTER_SEQUENCE
+          (CLUSTER_SEQUENCE_ID, SOURCE_BUSKEY, CLUSTER_NAME, SEQUENCE)
+        VALUES
+          (0, C_DUMMY, C_DUMMY, 0);
+      END IF;
+
+      MERGE INTO DIM_CLUSTER_SEQUENCE T
+      USING(
+            SELECT TO_CHAR(CMM_CLUSTER_SEQUENCE_ITEM_ID) SOURCE_BUSKEY,
+                   UPPER(CLUSTER_NAME) CLUSTER_NAME,
+                   SEQUENCE
+            FROM CMM_CLUSTER_SEQUENCE_ITEM@MYLINKAPP
+      ) S
+      ON (T.SOURCE_BUSKEY=S.SOURCE_BUSKEY)
+      WHEN MATCHED THEN UPDATE
+        SET T.CLUSTER_NAME = S.CLUSTER_NAME,
+            T.SEQUENCE     = S.SEQUENCE
+      WHEN NOT MATCHED THEN INSERT(
+        CLUSTER_SEQUENCE_ID,
+        SOURCE_BUSKEY,
+        CLUSTER_NAME,
+        SEQUENCE)VALUES(
+        GET_SEQ_NEXTVALUE('SEQ_CLUSTER_SEQUENCE'),
+        S.SOURCE_BUSKEY,
+        S.CLUSTER_NAME,
+        S.SEQUENCE);
+
+    COMMIT;
+
+  END POP_DIM_CLUSTER_SEQUENCE;
+
+
   PROCEDURE POP_DIM_TRANSFER IS
   BEGIN
     DISABLE_ALL_CONS;
@@ -7595,7 +8279,7 @@ WHEN NOT MATCHED THEN
          PROD_CRITERIA_GROUP_ID,
          LOC_CRITERIA_GROUP_ID,
          YEARSEASON_CRITERIA_GROUP_ID,
-         BASE_UNITS_BK)
+         SETTING_VALUE_BK)
       VALUES
         (0,
          'DUMMY',
