@@ -3,6 +3,7 @@
 
 This is a script for generating CPU/IO/Memory/Network usage chart.
 """
+import matplotlib.dates as mdates
 
 
 def try_or_none(f):
@@ -11,7 +12,7 @@ def try_or_none(f):
     def f_or_none(x):
         try:
             return f(x)
-        except:
+        except:  # @IgnorePep8
             return None
     return f_or_none
 
@@ -58,21 +59,22 @@ def cpu_chart(category, sourcefile, starttime, endtime,
 
     # drop CPU usage image
     from matplotlib import pyplot as plt
+    fig, ax = plt.subplots()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+    fig.autofmt_xdate()
     plt.plot(time, user_p, 'g-', label=category + " CPU Usage")
     plt.title(category + " CPU usage")
     plt.ylabel("CPU usage")
-
+    plt.ylim(0, max(user_p))
     ''' way 1'''
     # 1,rotate the x axix
-    _, labels = plt.xticks()
-    plt.ylim(0, 100)
-    plt.setp(labels, rotation=90)
+#     _, labels = plt.xticks()
+#     plt.setp(labels, rotation=90)
 
-    '''way 2
-    from datetime import time
-    plt.ylim(0,100)
-    plt.xticks(times,[x.strftime('%H:%M:%S') for x in times],rotation=90)
-    '''
+    '''way 2'''
+#     plt.ylim(0, 100)
+#     plt.xticks(time, [x.strftime('%H:%M:%S') for x in time], rotation=90)
+
     # plt.show()
 
     src = os.getcwd() + os.sep + targetfile
@@ -146,6 +148,8 @@ def io_chart(category, sourcefile, starttime, endtime, targetpath, targetfile):
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
     ax1.plot(time, tps, 'g-', label=category + " tps")
     ax2.plot(time, MBPS, 'r-', label=category + " MBPS")
+    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+    ax2.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
     fig.autofmt_xdate()
     fig.suptitle(category + " tps and MBPS")
     ax1.set_xlabel('time')
@@ -205,12 +209,15 @@ def memory_chart(category, sourcefile, starttime, endtime,
 
     # draw Memory usage image
     from matplotlib import pyplot as plt
+    fig, ax = plt.subplots()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+    fig.autofmt_xdate()
     plt.plot(time, mem_used_in_GB, 'g-', label=category + " Memory Used")
     plt.title(category + " Memory Used")
     plt.ylabel('Memory_used_in_GB')
     plt.xlabel('time')
-    _, labels = plt.xticks()
-    plt.setp(labels, rotation=90)
+#     _, labels = plt.xticks()
+#     plt.setp(labels, rotation=90)
 
     # plt.show()
     src = os.getcwd() + os.sep + targetfile
@@ -267,6 +274,7 @@ def network_chart(category, sourcefile, starttime, endtime,
     # draw tps image
     from matplotlib import pyplot as plt
     fig, ax = plt.subplots()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
     ax.plot(time, troughout_kb_per_s, 'g-',
             label=category + ' Network throughout per second')
     fig.autofmt_xdate()
@@ -326,15 +334,18 @@ def queue_chart(category, sourcefile, starttime, endtime,
 
     # drop process queue image
     from matplotlib import pyplot as plt
+    fig, ax = plt.subplots()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+    fig.autofmt_xdate()
     plt.plot(time, runq_size, 'g-', label=category + ' process queue')
     plt.title(category + " process queue")
     plt.ylabel(category + " process queue")
     plt.xlabel('time')
 
     # 1,rotate the x axix
-    _, labels = plt.xticks()
     plt.ylim(0, max(runq_size))
-    plt.setp(labels, rotation=90)
+#     _, labels = plt.xticks()
+#     plt.setp(labels, rotation=90)
 
     # plt.show()
     src = os.getcwd() + os.sep + targetfile

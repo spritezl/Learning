@@ -84,6 +84,6 @@ def extractLog(logWriterFile, starttime, endtime):
 
 # test with actual time range
 activityChart(calcActivity(extractLog(
-    r'D:\Project\Allocation\Load\20160918\LogWriterLog203.txt',
+    r'D:\Project\Allocation\Load\20160918\LogWriterLog204.txt',
     datetime.strptime('2016-09-13 00:00:00', '%Y-%m-%d %H:%M:%S'),
     datetime.strptime('2016-09-14 00:00:00', '%Y-%m-%d %H:%M:%S'))))
